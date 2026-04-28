@@ -1,3 +1,1366 @@
+
+Claude terminó la respuesta
+Dijiste: Actualmente en mi casa somos 2 adultos y 5 hijos:
+Actualmente en mi casa somos 2 adultos y 5 hijos:
+
+1.- Marcelo 20 años
+2.-Camila 16 años
+3.-Sofia 15 años
+4.-Arantza 11 años
+5.- Leon casi 8 años
+
+Con tantas actividades diarias, el dia a dia es un caos, ya que nosotros tenemos que mover a colegios y escuelas a todos menos a Marcelo
+
+Vivimos en caos total necesito generar un programa de gestion de actividades del hogar para poder asignar tareas de una manera eficiente y mantener la casa y la ropa limpia
+
+3:24 p.m.
+Claude respondió: ¡Te entiendo perfectamente, Ricardo!
+¡Te entiendo perfectamente, Ricardo! Con 7 personas en casa y todos con horarios distintos, necesitas un sistema, no buena voluntad. Te voy a ayudar a diseñar algo que funcione.
+
+Antes de armar el programa, necesito entender algunas cosas clave para que el sistema se ajuste a tu realidad y no sea uno más que abandonen en 2 semanas:
+
+Dijiste: P: ¿Qué áreas son las que más se te salen de control hoy?
+P: ¿Qué áreas son las que más se te salen de control hoy? (Seleccione todas las que correspondan)
+R: Ropa (lavar/doblar/guardar), Cocina y comidas, Limpieza de áreas comunes, Logística de traslados a escuelas
+
+P: ¿Qué edad mínima quieres que empiece a tener tareas asignadas?
+R: Desde Leon (casi 8)
+
+P: ¿Cómo prefieres que se vea/use el sistema?
+R: app dashboard digital + control en google sheets
+
+3:25 p.m.
+Claude respondió: Perfecto, Ricardo.
+Perfecto, Ricardo. Con eso ya tengo el panorama completo: las 4 áreas críticas, todos los hijos participando (Leon incluido) y una solución dual — dashboard visual + Google Sheets como fuente de verdad.
+
+Te voy a armar dos cosas que se complementan:
+
+Google Sheet maestro con la lógica de asignación rotativa, catálogo de tareas por edad, plan de comidas y matriz de traslados.
+Dashboard HTML interactivo que cualquiera de la familia puede abrir en su celular para ver "¿qué me toca hoy?" sin tener que entender el Sheet.
+Empiezo por diseñar la estructura. Primero leo el skill de spreadsheets para hacerlo bien:
+
+
+Vio 2 archivos
+Vio 2 archivos
+Listo. Ahora construyo el archivo maestro:
+
+
+Se ejecutaron 4 comandos, creó un archivo
+Se ejecutaron 4 comandos, creó un archivo
+Tengo errores #N/A en la hoja Puntaje. El problema es la sintaxis cross-sheet con punto (.) — funciona en LibreOffice pero no es estándar Excel. Lo corrijo a !:
+
+
+Editó un archivo, ejecutó un comando
+Editó un archivo, ejecutó un comando
+Cero errores en 44 fórmulas. Ahora muevo el archivo a outputs y construyo el dashboard HTML interactivo:
+
+
+Mover archivo a outputs
+Mover archivo a outputs
+Ahora el dashboard. Lo armo como artifact React para que sea interactivo, mobile-first (lo van a abrir en el celular) y con un selector de persona:
+
+
+Leer skill frontend-design para asegurar calidad visual del dashboard
+Leer skill frontend-design para asegurar calidad visual del dashboard
+Buen contexto. Ahora un dashboard con personalidad — algo cálido y familiar, no corporativo:
+
+
+Creó un archivo, ejecutó un comando, archivo leído
+Creó un archivo, ejecutó un comando, archivo leído
+Listo, Ricardo. Te dejo el sistema completo:
+
+📊 Gestion_Familiar_Benavente.xlsx — Súbelo a Google Drive y ábrelo con Google Sheets. Tiene 9 hojas:
+
+Inicio — Portada navegable.
+Familia — Catálogo de los 7 con disponibilidad por turno.
+Catálogo de tareas — 32 tareas tipificadas con frecuencia, edad mínima, tiempo y puntos.
+Asignación semanal ← la pantalla operativa. 80+ tareas distribuidas L-D, validación de datos en columna "Hecho" (✓/Pendiente/N/A), formato condicional verde al marcar y % de cumplimiento automático en E3.
+Plan de comidas — Desayuno, lunch escolar, comida y cena para cada día.
+Traslados — Matriz con quién lleva y recoge; calcula automáticamente la carga semanal por adulto.
+Lavandería — Una carga por día con responsables (lavar/secar/doblar/guardar).
+Puntaje — Ranking que se actualiza solo a partir de los ✓ marcados.
+Reglas — 10 acuerdos del sistema.
+Todas las fórmulas están vivas (44 fórmulas, 0 errores) y se mantienen al subirlo a Google Sheets.
+
+📱 Dashboard_Familiar.jsx — Dashboard React mobile-first. Cada miembro abre la página y selecciona su nombre con un tap; ve sólo sus tareas del día con horario y puntos. Tiene 4 vistas: Hoy (lo más usado), Semana (panorámica), Comidas y Marcador con liga familiar gamificada.
+
+Las 3 decisiones clave del diseño que vale la pena que sepas:
+
+Una carga de lavadora al día con responsable rotativo de doblar. Es la regla que más impacto va a tener — la ropa deja de acumularse cuando hay un día asignado a cada tipo (uniformes lunes, claros martes, oscuros miércoles, deportiva jueves, sábanas viernes).
+León (8) y Arantza (11) tienen tareas reales, no decorativas. Tender cama, llevar ropa al cesto, recoger juguetes, revisar mochila. La curva de responsabilidad arranca temprano sin agobiarlos.
+Junta familiar de 15 minutos los domingos a las 20:00. Es donde se ajusta lo que no funcionó. Sin esta junta el sistema se cae en 3 semanas — con ella, se afina solo.
+Próximo paso sugerido: ajusta los horarios reales de las escuelas en la hoja 05_Traslados (los puse como placeholder), y el sábado próximo arranca con la asignación tal cual está. La primera semana siempre se rompe en algo — eso lo capturas en la junta del domingo y queda ajustado para la siguiente.
+
+¿Quieres que te genere también la versión imprimible (PDF) para colgar en la cocina, o prefieres que le agregue las actividades extracurriculares específicas de cada hijo cuando me las pases?
+
+
+Gestion familiar benavente
+Hoja de cálculo · XLSX 
+
+Dashboard familiar
+Código · JSX 
+Dijiste: Papa es el supervisor no hace tareas
+Papa es el supervisor no hace tareas
+
+3:42 p.m.
+Claude respondió: Entendido, Ricardo.
+Entendido, Ricardo. Papá pasa a rol de Supervisor — coordina el sistema, revisa cumplimiento, dirige la junta de los domingos, pero las tareas operativas se redistribuyen entre los demás.
+
+Antes de redistribuir, una decisión rápida que cambia mucho el balance:
+
+Dijiste: P: Papá tenía asignados los traslados de Arantza y León por la mañana.
+P: Papá tenía asignados los traslados de Arantza y León por la mañana. ¿Cómo lo resolvemos?
+R: Mama solo se encarga de la comida
+
+P: Las tareas domésticas de Papá (basura, trapear, súper, etc.) ¿a quién se las paso?
+R: Repartir entre los 3 mayores
+
+3:43 p.m.
+Claude respondió: Perfecto, ahora sí queda claro el modelo.
+Perfecto, ahora sí queda claro el modelo. Déjame confirmar la nueva estructura antes de regenerar todo:
+
+Roles redefinidos:
+
+Papá → Supervisor (coordina, no opera)
+Mamá → Chef principal (solo cocina: desayunos, comidas, plan semanal, súper)
+Marcelo (20), Camila (16), Sofía (15) → Carga operativa principal (traslados, limpieza pesada, ropa, basura, trapear)
+Arantza (11) y León (8) → Tareas ligeras de su edad (cama, mochila, recoger, mesa)
+Punto crítico que necesito resolver: los traslados a la escuela en la mañana (06:50 y 07:00) salen antes de que Camila y Sofía lleguen a la prepa. Marcelo es el único de los 3 mayores que puede hacerlos en horario escolar. Las opciones realistas son:
+
+Marcelo lleva a Arantza y León todas las mañanas (07:00) — Camila y Sofía se van solas a prepa o las lleva Mamá ANTES de cocinar.
+Mamá hace los traslados de la mañana (es la única adulta operativa disponible a esa hora) y la cocina del desayuno la asume Camila o Sofía rotando.
+Mantener a Papá SOLO en traslados de mañana (10 min de manejo, no es una "tarea doméstica") y el resto sí se redistribuye.
+Voy con la opción más realista: Marcelo asume los traslados matutinos (es joven adulto sin escuela, perfecto para esto), y los desayunos los rotan Camila y Sofía entre semana mientras Mamá prepara comidas. Si prefieres otra opción me dices y ajusto.
+
+Regenero el sistema:
+
+
+Creó un archivo, ejecutó un comando
+Creó un archivo, ejecutó un comando
+0 errores en 38 fórmulas. Verifico la distribución de carga para asegurar que quedó balanceada:
+
+
+Verificar distribución de carga por persona
+Verificar distribución de carga por persona
+La distribución quedó muy balanceada entre los 3 mayores (Marcelo 25, Camila 26, Sofía 24 tareas). Mamá tiene 19 tareas concentradas 100% en cocina y traslado de prepa (su rol). Papá tiene 7 tareas exclusivas de supervisión. Arantza y León 13-14 tareas apropiadas a su edad.
+
+Muevo a outputs y actualizo el dashboard:
+
+
+Reemplazar archivo en outputs
+Reemplazar archivo en outputs
+Ahora actualizo el dashboard para reflejar los nuevos roles:
+
+
+Creó un archivo, ejecutó un comando, archivo leído
+Creó un archivo, ejecutó un comando, archivo leído
+Sistema rebalanceado. Esta es la nueva distribución de carga semanal:
+
+Persona	Rol	Tareas	Puntos	Concentración
+Papá	👔 Supervisor	7	45	Solo supervisión y junta dominical
+Mamá	👩‍🍳 Chef	19	240	100% cocina (14) + traslado prepa (5)
+Marcelo	🚗 Logística	25	161	Traslados (10) + apoyo pesado
+Camila	🧹 Operación	26	128	Cocina ligera (10) + limpieza (8) + ropa (7)
+Sofía	🧹 Operación	24	120	Similar a Camila
+Arantza	🛏️ Ligeras	13	56	Cama, mesa, mochila
+León	🛏️ Ligeras	14	60	Cama, recoger juguetes, mochila
+Cambios clave:
+
+Papá ahora aparece en el sistema con tareas de supervisión explícitas: revisión diaria a las 21:45 (10 min) y junta familiar dominical (15 min). Esto importa porque sin estos checkpoints el sistema se desinfla — no operar ≠ no aparecer.
+Marcelo asume los traslados matutinos de Arantza y León (07:00 todos los días) y los recoge a las 13:30. Es lo que hace viable que Mamá se concentre en cocinar.
+Las cenas las rotan Camila y Sofía entre semana (lunes Camila, martes Sofía, etc.). Son cenas ligeras de 20 minutos — es buena escuela de cocina además.
+Marcelo acompaña a Mamá al súper los sábados para cargar — convierte una tarea de 90 minutos solitaria en una rutina compartida.
+Papá no aparece en el marcador de la liga familiar. Su métrica es el % de cumplimiento global de la familia (visible arriba a la derecha en la pestaña "Marcador"). Si la familia falla, falla el supervisor — alineación correcta de incentivos.
+El primer momento de fricción que vas a ver: Marcelo va a sentir que carga mucho (traslados + lavavajillas dos días + aspirar + basura + acompañar al súper). Tiene 25 tareas, igual que sus dos hermanas adolescentes juntas en proporción. Vale la pena que en la primera junta dominical revises si esa carga es sostenible o si Camila/Sofía pueden absorber un par de cosas más una vez que Marcelo demuestre que los traslados funcionan.
+
+¿Quieres que ajuste algo más antes de que lo subas a Google Sheets — por ejemplo los horarios reales de las escuelas de cada uno, o que arme una versión PDF imprimible para colgar en la cocina?
+
+
+Gestion familiar benavente
+Hoja de cálculo · XLSX 
+
+Dashboard familiar
+Código · JSX 
+Dijiste: Los traslados los realizamos mama y papa dependiendo de las cargas laborales de cada uno
+Los traslados los realizamos mama y papa dependiendo de las cargas laborales de cada uno
+
+3:50 p.m.
+Claude respondió: Ah, perfecto — los traslados son trabajo de adultos, eso tiene sentido.
+Ah, perfecto — los traslados son trabajo de adultos, eso tiene sentido. Papá supervisa el sistema doméstico pero los traslados sí los hace porque es algo que se coordina entre ustedes según las cargas del día.
+
+Antes de redistribuir, una decisión que cambia mucho cómo queda registrado el sistema:
+
+Dijiste: P: ¿Cómo prefieres que aparezcan los traslados en el sistema?
+P: ¿Cómo prefieres que aparezcan los traslados en el sistema?
+R: "Papá o Mamá" (cualquiera, se coordinan en el momento)
+
+P: ¿Mantengo el rol de supervisor de Papá (revisión diaria + junta dominical) además de los traslados?
+R: Sí, mantener supervisión con junta dominical
+
+3:53 p.m.
+Claude respondió: Perfecto, claro y simple.
+Perfecto, claro y simple. Aplico:
+
+Roles finales:
+
+Papá → Supervisor (revisión diaria + junta dominical) + co-responsable de traslados
+Mamá → Chef principal + co-responsable de traslados
+Los traslados los marco como "Papá o Mamá" con un campo de Notas vacío para que el día anterior cualquiera escriba quién lo cubre según la agenda
+Marcelo, Camila, Sofía, Arantza, León → operación doméstica (sin traslados)
+Esto libera a Marcelo de los 5 traslados diarios que tenía cargados. Voy a redistribuir esas tareas — Marcelo se queda con la carga doméstica pesada (lavavajillas, aspirar, trapear, basura) y un poco más se reparte entre Camila y Sofía.
+
+
+Editó 3 archivos
+Editó 3 archivos
+Ahora reemplazo todas las asignaciones de traslados de Marcelo y Mamá por "Papá o Mamá", y reasigno las tareas domésticas que tenía Marcelo en sus huecos:
+
+
+Reescribir la matriz completa de asignaciones con traslados como Papá o Mamá y carga doméstica redistribuida
+Reescribir la matriz completa de asignaciones con traslados como Papá o Mamá y carga doméstica redistribuida
+Ahora actualizo la hoja de Traslados y la lógica del puntaje (incluir a Papá ahora que opera traslados):
+
+
+Actualizar matriz de traslados a Papá o Mamá
+Actualizar matriz de traslados a Papá o Mamá
+Ahora una nota importante en la hoja de Traslados que reemplace la de "carga semanal por persona" (ya no aplica el conteo por persona porque es compartido):
+
+
+Reemplazar el resumen de carga semanal por una nota de coordinación
+Reemplazar el resumen de carga semanal por una nota de coordinación
+Ahora actualizo la hoja de Lavandería para que Marcelo aparezca menos cargado ahí (se queda con limpieza pesada). Y actualizo la hoja de Reglas para reflejar el nuevo modelo de traslados:
+
+
+Actualizar reglas para reflejar traslados compartidos entre Papá y Mamá
+Actualizar reglas para reflejar traslados compartidos entre Papá y Mamá
+También mejoro un detalle en la columna F (Hecho) del Asignación_Semanal: las tareas de "Papá o Mamá" no deberían contar para puntaje individual sino como cumplimiento conjunto. Lo dejo simple — no se cuentan en el puntaje pero sí en el % global de la familia. Y actualizo el catálogo de tareas para que el traslado diga "Papá o Mamá":
+
+
+Actualizar nombre de las tareas de traslado en el catálogo para reflejar responsabilidad compartida
+Actualizar nombre de las tareas de traslado en el catálogo para reflejar responsabilidad compartida
+Ahora regenero y valido:
+
+
+Regenerar archivo y validar fórmulas
+Regenerar archivo y validar fórmulas
+Cero errores. Verifico la nueva distribución de carga:
+
+
+Verificar distribución actualizada
+Verificar distribución actualizada
+Distribución mucho más balanceada. Marcelo bajó de 25 a 18 tareas (carga sostenible). Mamá quedó concentrada solo en cocina (14 tareas, 200 pts). Los traslados quedan visibles como un bloque compartido (20 tareas/semana entre los dos adultos).
+
+Muevo a outputs y actualizo el dashboard:
+
+
+Se ejecutaron 2 comandos, creó un archivo, archivo leído
+Se ejecutaron 2 comandos, creó un archivo, archivo leído
+Listo. Distribución final balanceada:
+
+Persona	Rol	Tareas/semana	Puntos
+Papá	👔 Supervisor + Traslados (compartidos)	7 fijas	45
+Mamá	👩‍🍳 Chef + Traslados (compartidos)	14	200
+Papá o Mamá	🚗 Traslados a coordinar	20	160
+Marcelo	🧹 Operación pesada	18	96
+Camila	🧹 Operación alta	26	128
+Sofía	🧹 Operación alta	24	120
+Arantza	🛏️ Tareas ligeras	13	56
+León	🛏️ Tareas ligeras	14	60
+Tres detalles importantes que vale la pena que sepas:
+
+Los traslados aparecen como "Papá o Mamá" con un anillo violeta en el dashboard. Cuando Papá o Mamá entran a su vista personal, ven SUS tareas más las compartidas, con un mensaje recordando que se coordinan según la agenda. Eso evita el problema de "creí que tú lo ibas a hacer" — el día anterior se define quién toma qué.
+Marcelo bajó de 25 a 18 tareas semanales (carga sostenible). Liberó las 5 tareas/semana de traslados que tenía asignadas, conservando lavavajillas diario, aspirar 2x/semana, trapear, basura, sábanas y limpieza profunda de cocina los sábados. Sigue siendo el operativo más cargado de los hijos pero ya no se siente como un chofer.
+En la vista del Marcador, Mamá ahora tiene su propia tarjeta (rosa) junto a la de Papá (negra), separadas del resto. Su métrica son las comidas servidas y el plan semanal cumplido — no se le mide igual que a los hijos porque su rol es funcional, no incremental.
+El protocolo crítico de los traslados (regla #4 ya en el sistema): la noche anterior, a más tardar 21:30, Papá y Mamá deciden quién cubre cada traslado del día siguiente. Esto se anota en la columna "Notas" de la asignación semanal. Los viernes en la junta dominical, proyectan los traslados conflictivos de la siguiente semana (ej: "el martes los dos tenemos junta a las 13:30, ¿Uber para recoger niños o Marcelo libre?").
+
+¿Quieres que ajuste los horarios reales de cada escuela (puse placeholders en 06:50, 07:00, 07:30) o que avancemos a generar la versión PDF imprimible para colgar en la cocina?
+
+
+Gestion familiar benavente
+Hoja de cálculo · XLSX 
+
+Dashboard familiar
+Código · JSX 
+Dijiste: Marcelo Sofia y Camila tienen ya las siguientes asignaciones - Marcelo Lava y acomoda su ropa y la de mama, Sofia lava y acomoda su ropa y la de papa, Camila L…
+Marcelo Sofia y Camila tienen ya las siguientes asignaciones - Marcelo Lava y acomoda su ropa y la de mama, Sofia lava y acomoda su ropa y la de papa, Camila Lava y acomoda su ropa y la de Leon, y cada semana deben rotar, mama lava la demas ropa y Arantza ordena su ropa, cambia el nombre de familia Benavente por Limpieza del Hogar, Camila va los sabado a la prepa y la lleva y recoge papa, Sofia esta en Linea y no va a la prepa, toma las clases en linea desde casa o donde este papa, el plan es para poder tener tiempo en las mañana papa camila y sofia de ir al gimnasio, Leon entrena martes y jueves futbol de 530 a 730  por la tardey entrena de lunes a jueves de 8pma 930 pm flag football, Camila, Sofia y Arantza entrenan de 730pm a a 930pm de Lunes a jueves Flag football, mama entrena flag martes miercoles y jueves de 730pm a 930 pm, Leon y Arantza entran 750 am al colegio y salen 2:15pm
+
+4:01 p.m.
+Claude respondió: Excelente información, Ricardo.
+Excelente información, Ricardo. Esto cambia bastante el sistema — me dejaste decisiones reales que tomar. Antes de regenerar todo, déjame validar mi entendimiento porque hay varias cosas que tienen impacto operativo:
+
+Lo que entendí:
+
+🏷️ Nombre del sistema: "Limpieza del Hogar" (en vez de "Familia Benavente")
+
+👕 Sistema de ropa con rotación semanal:
+
+Semana A: Marcelo (suya + Mamá) · Sofía (suya + Papá) · Camila (suya + León)
+Semana B y C: rotan los emparejamientos (3 ciclos)
+Mamá: lava el resto (sábanas, toallas, ropa de cocina, ropa de la casa)
+Arantza: lava y acomoda solo la suya
+Asumo que cada uno hace ciclo completo: lavar + secar + doblar + guardar de las dos personas que le tocan
+🚗 Traslados redefinidos:
+
+Sofía: prepa en línea desde casa (o donde esté Papá si va al trabajo) — sin traslado escolar
+Camila: prepa los sábados — la lleva y recoge Papá
+Arantza y León: entran 7:50 am, salen 2:15 pm (Papá o Mamá)
+🏋️ Mañanas libres (6:00-7:30 am): Papá, Camila y Sofía van al gimnasio antes de:
+
+Papá: salir a llevar a Arantza y León (~7:30) o ir al trabajo
+Camila/Sofía: empezar clases (Sofía en línea, Camila no va lunes-viernes)
+🏈 Cargas de entrenamiento (todas en la tarde-noche):
+
+Hijo	Lun	Mar	Mié	Jue
+León flag	8:00-9:30 pm	8:00-9:30 pm	8:00-9:30 pm	8:00-9:30 pm
+León futbol	—	5:30-7:30 pm	—	5:30-7:30 pm
+Camila flag	7:30-9:30 pm	7:30-9:30 pm	7:30-9:30 pm	7:30-9:30 pm
+Sofía flag	7:30-9:30 pm	7:30-9:30 pm	7:30-9:30 pm	7:30-9:30 pm
+Arantza flag	7:30-9:30 pm	7:30-9:30 pm	7:30-9:30 pm	7:30-9:30 pm
+Mamá flag	—	7:30-9:30 pm	7:30-9:30 pm	7:30-9:30 pm
+Antes de armar todo, dos decisiones que cambian mucho el resultado final:
+
+Dijiste: P: El entrenamiento de flag de los 4 hijos (y Mamá) ¿es en el mismo lugar a la misma hora?
+P: El entrenamiento de flag de los 4 hijos (y Mamá) ¿es en el mismo lugar a la misma hora?
+R: Mismo lugar mama se va con Leon los dias de football y papa lleva a los demas y los dias  de no futbol de Leon los lleva mama
+
+P: Con tantos entrenamientos por la noche, ¿cómo manejan las cenas L-J?
+R: Cenas tardías 9:30 pm después del entrenamiento
+
+4:03 p.m.
+Claude respondió: Perfecto, ya tengo todo claro.
+Perfecto, ya tengo todo claro. Esto es un cambio grande así que voy a regenerar el sistema completo desde cero con la lógica nueva. Antes de programar, te resumo cómo va a quedar la matriz de traslados al gimnasio/escuela/entrenamientos para que confirmes que entendí:
+
+🏋️ Mañanas (Lun-Vie):
+
+6:00-7:30 am: Papá + Camila + Sofía → gimnasio juntos
+7:30-7:50 am: Papá (o Mamá) lleva a Arantza y León al colegio (entran 7:50)
+Después: Sofía toma clases en línea desde casa o donde Papá esté
+📚 Regreso del colegio:
+
+2:15 pm: Papá o Mamá recogen a Arantza y León
+🏈 Tardes-noches (Lun-Jue) — entrenamientos:
+
+Día	5:30-7:30 pm (futbol León)	7:30-9:30 pm (flag — mismo lugar)
+Lunes	—	Mamá lleva a León, Camila, Sofía y Arantza (todos al mismo lugar)
+Martes	Mamá lleva y trae a León (futbol)	Mamá ya está allá con León (que pasa a flag a las 8) + entrena ella misma. Papá lleva a Camila/Sofía/Arantza
+Miércoles	—	Mamá lleva a León, Camila, Sofía y Arantza. Mamá entrena flag.
+Jueves	Mamá lleva y trae a León (futbol)	Igual que martes — Mamá ya allá, Papá lleva a las niñas
+Viernes	—	— (descanso)
+🏈 Sábado: Papá lleva y recoge a Camila a la prepa
+
+¿Está correcta esta matriz, Ricardo? Si me confirmas con un "sí" arranco con la generación del sistema completo. Si hay algún ajuste (sobre todo en quién lleva a quién los martes y jueves cuando León tiene futbol Y luego flag) me lo dices y ajusto antes.
+
+Dijiste: Esta correcto solo considera que mama lleva a Leon y Arantza a la escuela y de ahi se va a su negocio
+Esta correcto solo considera que mama lleva a Leon y Arantza a la escuela y de ahi se va a su negocio
+
+4:04 p.m.
+Claude respondió: Perfecto, entonces Mamá tiene un patrón fijo en las mañanas (deja a Arantza y León y se va a su negocio), y los traslados de gimnasio/regreso de escuela los ma…
+Perfecto, entonces Mamá tiene un patrón fijo en las mañanas (deja a Arantza y León y se va a su negocio), y los traslados de gimnasio/regreso de escuela los maneja Papá. Eso simplifica mucho.
+
+Voy a regenerar el sistema completo desde cero con toda la lógica nueva:
+
+
+Creó un archivo, ejecutó un comando
+Creó un archivo, ejecutó un comando
+0 errores en 39 fórmulas. Verifico balance de cargas:
+
+
+Verificar distribución de carga
+Verificar distribución de carga
+Distribución sólida. Mamá tiene 41 tareas (la más alta) porque concentra cocina + traslados de niños — refleja la realidad de su rol. Marcelo, Camila y Sofía rondan los 20-25 tareas con balance entre cocina, limpieza y ropa. Ahora muevo a outputs y construyo el dashboard actualizado:
+
+
+Limpiar outputs y copiar el nuevo archivo
+Limpiar outputs y copiar el nuevo archivo
+Ahora el dashboard. Voy a hacerlo más robusto con persistencia (storage) para que cada miembro pueda marcar sus tareas y se guarde, además del selector de semana de rotación de ropa:
+
+
+Creó un archivo, ejecutó un comando, archivo leído
+Creó un archivo, ejecutó un comando, archivo leído
+Listo, Limpieza del Hogar v3 completo. Distribución final balanceada:
+
+Persona	Rol	Tareas	Puntos
+Papá	👔 Supervisor + Logística PM	16	77
+Mamá	👩‍🍳 Chef + Logística niños	41	359
+Marcelo	🧹 Operación pesada	20	109
+Camila	🎓 Operación alta + prepa sáb	24	90
+Sofía	💻 Operación alta + prepa online	25	97
+Arantza	🛏️ Tareas ligeras	16	78
+León	🛏️ Tareas ligeras	14	62
+Las 5 piezas clave del nuevo sistema:
+
+Mañana liberada (6:00-7:30am) — Papá, Camila y Sofía van al gimnasio mientras Mamá prepara desayuno y se prepara para llevar a Arantza y León al colegio. Lo marqué como categoría "Personal" (color amarillo) porque no es una tarea operativa pero es importante que esté visible para que nadie genere conflictos en ese horario.
+Sistema de rotación de ropa de 3 semanas (hoja nueva 06_Rotación_Ropa) con un selector dinámico en la celda B3 — cambias "Sem A/B/C" y la columna "TE TOCA ESTA SEMANA" se actualiza automática. Cada lunes en la junta dominical, Papá rota. Marcelo siempre lava la suya + alguien (Mamá → León → Papá), Sofía rota Papá → Mamá → León, Camila rota León → Papá → Mamá. Mamá lava sábanas/toallas/ropa de hogar (fijo), Arantza solo la suya (fijo). El día de lavado es sábado 9:30am, doblar y guardar sábado 7pm.
+Cenas tardías 9:30pm post-entreno (Lun-Jue) — Mamá las prepara al volver de recoger flag a las 9:30. Diferentes personas lavan trastes según el día (Marcelo lunes/jueves, Sofía martes, Camila miércoles). El viernes es cena familiar a las 8pm (sin entrenamiento).
+Logística de entrenamientos clara — Lunes y miércoles Mamá lleva a TODOS al flag (y entrena ella misma los miércoles). Martes y jueves se divide: Mamá lleva a León al futbol 5:30 y se queda allá; Papá lleva a Camila/Sofía/Arantza al flag 7:30 (mismo lugar); Mamá recoge a todos a las 9:30. Sin Marcelo en este loop — él cubre operación doméstica pesada.
+Sofía y Camila con horarios distintos — Sofía toma prepa en línea desde casa o donde Papá esté trabajando. Camila va a prepa solo los sábados (Papá la lleva 7:00am, recoge 1:00pm). Esto significa que Camila tiene tarde libre L-V para estudiar, lo cual la deja bien posicionada para tomar tareas operativas vespertinas.
+El primer momento de fricción que vas a ver: Mamá tiene 41 tareas, casi el doble de cualquier otro. Eso refleja la realidad de su rol concentrado en cocina + traslados de niños. Vale la pena revisarlo en la primera junta dominical: si Mamá se siente sobrecargada, lo más realista es que Camila o Sofía absorban las cenas tardías L-J (ya cocinan cenas en la rotación que tenían — pueden adaptarse a 9:30pm post-entreno fácilmente, ya están allá).
+
+¿Quieres que ajuste algo más, o avanzamos con la versión PDF imprimible para colgar en el refrigerador?
+
+
+Limpieza del hogar
+Hoja de cálculo · XLSX 
+
+Dashboard limpieza del hogar
+Código · JSX 
+Dijiste: Falto un punto importante de mencionar Arantza solo esta de lunes a viernes y se va saliendo de la escuela y regresa los domingos, ajusta sus actividades
+Falto un punto importante de mencionar Arantza solo esta de lunes a viernes y se va saliendo de la escuela y regresa los domingos, ajusta sus actividades
+
+4:19 p.m.
+Claude respondió: ¡Ah, dato clave!
+¡Ah, dato clave! Entonces Arantza está en la casa solo de viernes en la noche al domingo (regresa el domingo, sale el viernes saliendo del colegio). Las noches L-V no está, los entrenamientos de flag de Arantza L-J no aplican porque no está en la casa.
+
+Antes de ajustar, una decisión rápida:
+
+Dijiste: P: Arantza entrena flag football L-J 7:30-9:30pm pero no está en casa esos días.
+P: Arantza entrena flag football L-J 7:30-9:30pm pero no está en casa esos días. ¿Qué pasa con ese entrenamiento?
+R: si solo se va el viernes y regresa el domingo a las 9 pm
+
+P: El lunes en la mañana, ¿quién lleva a Arantza al colegio si llegó el domingo en la noche?
+R: la lleva mama junto con Leon
+
+4:20 p.m.
+Claude respondió: Perfecto, entonces ajusto:
+Perfecto, entonces ajusto:
+
+Disponibilidad de Arantza:
+
+🟢 Lunes a viernes (mañana hasta tarde): en casa + colegio + entrenamiento flag
+🔴 Viernes saliendo del colegio (~14:15) hasta domingo 21:00: fuera de casa
+🟢 Domingo 21:00 en adelante: de regreso, lista para semana
+Esto significa que sus tareas de fin de semana se eliminan completamente (limpieza profunda recámara sábado, lavar/doblar ropa propia sábado, comida familiar domingo, dejar uniforme listo domingo). Y el domingo 21:00 llega ya sin tiempo para tareas — directo a dormir para el lunes.
+
+Ajusto el sistema. La parte interesante es redistribuir lo que hacía Arantza el sábado (lavar su propia ropa, limpiar su recámara) — lo más limpio es que Mamá absorba la ropa de Arantza dentro de su carga (sábanas/hogar) y que la limpieza de su recámara se haga el viernes en la tarde antes de que se vaya.
+
+
+Editó 2 archivos, ejecutó un comando
+Editó 2 archivos, ejecutó un comando
+Ahora ajusto las asignaciones del viernes para que Arantza haga su limpieza profunda y lave su ropa antes de irse, y elimino sus asignaciones de sábado y domingo:
+
+
+Agregar tareas de Arantza el viernes saliendo del colegio antes de irse
+Agregar tareas de Arantza el viernes saliendo del colegio antes de irse
+Quito las asignaciones de Arantza el sábado:
+
+
+Quitar lavado de ropa de Arantza el sábado
+Quitar lavado de ropa de Arantza el sábado
+La respuesta de Claude fue interrumpida
+Dijiste: Arantza solo esta para actividades de Lunes a Jueves ya que el viernes no regresa a casa
+Arantza solo esta para actividades de Lunes a Jueves ya que el viernes no regresa a casa
+
+4:21 p.m.
+Claude respondió: ¡Perfecto, eso lo simplifica más!
+¡Perfecto, eso lo simplifica más! Entonces:
+
+Disponibilidad real de Arantza:
+
+🟢 Lunes a jueves: colegio + flag football + tareas de la noche
+🔴 Viernes desde antes del colegio hasta domingo 9pm: fuera de casa
+🟢 Domingo 9pm en adelante: llega y se va a dormir
+Esto significa que Arantza:
+
+✅ Sí participa: L-J en cama, mochila, mesa, recoger sala, ropa al cesto, flag L-J
+❌ No participa: colegio el viernes, ninguna tarea viernes/sábado/domingo
+🤔 Su ropa: la cubre Mamá (la mete con sábanas/ropa de hogar) o se queda en la lista pero se hace cuando regrese
+Voy a regenerar limpio. Primero borro el v4 que dejé a medias y arranco de v3:
+
+
+Editó 2 archivos, ejecutó un comando
+Editó 2 archivos, ejecutó un comando
+Ahora actualizo la rotación de ropa — Arantza sale del sistema porque su ropa la cubre Mamá:
+
+
+Quitar Arantza de la rotación de ropa, su ropa va con la de Mamá
+Quitar Arantza de la rotación de ropa, su ropa va con la de Mamá
+Ahora actualizo la matriz de traslados — Arantza solo va al colegio L-J, no V:
+
+
+Editó 2 archivos
+Editó 2 archivos
+Espera, eso eliminó la línea de Mamá que sí quiero conservar. Lo corrijo:
+
+
+Restaurar línea de Mamá en flag
+Restaurar línea de Mamá en flag
+Ahora actualizo el viernes para que ya no aparezca Arantza, y elimino sus tareas del sábado y domingo. Voy a modificar bloque por bloque. Primero, el viernes:
+
+
+Quitar Arantza del bloque del viernes (no está en la casa) y agregarle la tarea de empacar el jueves en la noche
+Quitar Arantza del bloque del viernes (no está en la casa) y agregarle la tarea de empacar el jueves en la noche
+Ahora le agrego la tarea de empacar a Arantza el jueves en la noche:
+
+
+Agregar tarea de empacar mochila de fin de semana de Arantza el jueves
+Agregar tarea de empacar mochila de fin de semana de Arantza el jueves
+Ahora elimino las tareas de Arantza del sábado (lavar ropa, limpiar recámara, doblar ropa):
+
+
+Editó 3 archivos
+Editó 3 archivos
+Ahora elimino Arantza del domingo (no estaba en la cocina pero sí en "dejar uniforme listo" — y como llega 9pm y se va a dormir, su uniforme del lunes lo prepara antes de irse el viernes o lo prepara Mamá):
+
+
+Quitar Arantza del domingo - llega 9pm y va directo a dormir
+Quitar Arantza del domingo - llega 9pm y va directo a dormir
+Agrego una nota explicativa en la hoja de traslados sobre la salida y regreso de Arantza, y una regla en la hoja de Reglas. Primero el nombre del archivo de salida para no sobrescribir el v3:
+
+
+Editó 2 archivos
+Editó 2 archivos
+Ahora agrego una regla específica sobre Arantza:
+
+
+Agregar regla sobre Arantza
+Agregar regla sobre Arantza
+Ahora regenero y valido:
+
+
+Regenerar archivo y validar fórmulas
+Regenerar archivo y validar fórmulas
+0 errores. Verifico la nueva distribución y que Arantza solo aparezca L-J:
+
+
+Verificar distribución de Arantza por día
+Verificar distribución de Arantza por día
+Arantza ahora tiene 11 tareas concentradas L-J (3-3-3-2 distribuidas). Cero tareas viernes/sábado/domingo. León ahora va al colegio el viernes (Mamá lo lleva solo). Mamá subió de 41 a 42 tareas (recoger Arantza domingo + dejar uniforme/mochila Arantza domingo).
+
+Muevo a outputs y actualizo el dashboard:
+
+
+Reemplazar archivo en outputs
+Reemplazar archivo en outputs
+Ahora ajusto el dashboard. Solo necesito modificar las asignaciones de Arantza y agregar un indicador visual de su disponibilidad:
+
+
+Ejecutó un comando, editó un archivo
+Ejecutó un comando, editó un archivo
+Ahora el cambio importante: actualizar las asignaciones del viernes en el Dashboard (quitar Arantza), agregar la tarea de empacar el jueves, y el domingo (recoger Arantza). Voy a buscar y reemplazar los bloques exactos:
+
+
+Editó 2 archivos
+Editó 2 archivos
+Ahora ajusto el viernes en el dashboard — quitar a Arantza:
+
+
+Ajustar bloque del viernes — Arantza ya no está, solo León va al colegio
+Ajustar bloque del viernes — Arantza ya no está, solo León va al colegio
+Quito Arantza del sábado en el dashboard:
+
+
+Editó 3 archivos
+Editó 3 archivos
+Ajusto el domingo: quito Arantza, agrego que Mamá deja su uniforme listo y Papá/Mamá la recoge:
+
+
+Ajustar domingo en dashboard - Arantza no participa, llega 9pm
+Ajustar domingo en dashboard - Arantza no participa, llega 9pm
+Ahora agrego un indicador visual en la tarjeta de Arantza cuando esté seleccionada, mostrando que solo opera L-J. Modifico la sección donde se muestra el rol de la persona seleccionada:
+
+
+Agregar indicador visual de disponibilidad L-J para Arantza
+Agregar indicador visual de disponibilidad L-J para Arantza
+Muevo el dashboard final a outputs:
+
+
+Ejecutó un comando, archivo leído
+Ejecutó un comando, archivo leído
+Listo. Ajustes aplicados a Arantza:
+
+Lo que cambió:
+
+Antes	Ahora
+Arantza con tareas L-D	Arantza solo L-J (11 tareas concentradas)
+Lavaba su ropa el sábado	Mamá lava su ropa con sábanas/hogar
+Limpiaba recámara sábado	Sale el viernes mañana — recámara queda como esté
+Iba al colegio L-V	Solo va L-J
+Tendía cama el viernes	Ya no está el viernes
+Recogía mesa cena viernes	Sofía ya no necesita ese apoyo
+Dejaba uniforme listo domingo	Mamá prepara su uniforme y mochila el domingo a las 19:00
+Sin tarea de empaque	Jueves 22:05: empacar maleta de fin de semana
+Sin recogida del fin de semana	Domingo 21:00: Papá o Mamá la recogen
+Nueva distribución:
+
+Persona	Tareas	Puntos
+Papá	16	77
+Mamá	42	364
+Papá o Mamá	6	48
+Marcelo	20	109
+Camila	24	90
+Sofía	25	97
+Arantza	11	50
+León	15	65
+Tres detalles importantes:
+
+El jueves a las 22:05 Arantza empaca su maleta — es la única tarea logística suya antes de irse. El uniforme/mochila para el lunes lo prepara Mamá el domingo (porque Arantza llega 9pm y se va directo a dormir).
+El viernes León va solo al colegio — Mamá lo lleva sola, lo recogen Papá o Mamá. Eso libera el coche para movimientos del fin de semana.
+Si seleccionas a Arantza en el dashboard, te aparece un banner ámbar recordando su disponibilidad ("En casa solo de Lunes a Jueves. Sale viernes en la mañana, regresa domingo 9pm"). Esto evita confusiones al consultar la app.
+Pregunta operativa que vale la pena que resuelvas pronto: la rotación de ropa de Arantza ahora la cubre Mamá fija, pero ¿la ropa que use Arantza fuera de casa (V-D) la trae sucia el domingo y se mete a la lavada del siguiente sábado, o se queda en su otra casa? Si se la traen, hay que considerar que esa ropa NO va a estar lavada para el lunes — habría que tener uniformes y ropa básica de Lun-Jue separados. Lo platican en la primera junta dominical.
+
+¿Hay algo más por ajustar antes de pasar a la versión PDF imprimible?
+
+
+Limpieza del hogar
+Hoja de cálculo · XLSX 
+
+Dashboard limpieza del hogar
+Código · JSX 
+Dijiste: Papá no lava ajusta las actividades solo Camila Sofía y Marcelo
+Papá no lava ajusta las actividades solo Camila Sofía y Marcelo
+
+8:16 p.m.
+Claude respondió: Perfecto, entonces simplifico el ciclo de rotación: solo Camila, Sofía y Marcelo rotan entre sí.
+Perfecto, entonces simplifico el ciclo de rotación: solo Camila, Sofía y Marcelo rotan entre sí. Como son 3 personas y cada uno se cubre a sí mismo, los emparejamientos quedan así (cada uno lava su propia ropa más alguien más, rotando 3 semanas):
+
+Nueva rotación:
+
+Persona	Sem A	Sem B	Sem C
+Marcelo	Marcelo + Mamá	Marcelo + León	Marcelo + Sofía
+Sofía	Sofía + Camila	Sofía + Mamá	Sofía + León
+Camila	Camila + León	Camila + Marcelo	Camila + Mamá
+Verificación de cobertura por semana (que todos queden cubiertos cada semana):
+
+Semana	Quién lava ropa de cada uno
+Sem A	Marcelo→Mamá, Sofía→Camila, Camila→León. Cubre: M, S, C, Mamá, León.
+Sem B	Marcelo→León, Sofía→Mamá, Camila→Marcelo. Cubre: M, S, C, Mamá, León.
+Sem C	Marcelo→Sofía, Sofía→León, Camila→Mamá. Cubre: M, S, C, Mamá, León.
+Papá: ya no lava (su ropa la cubre Mamá junto con sábanas/hogar). Arantza: Mamá la sigue cubriendo (ya queda fuera del ciclo).
+
+Aplico:
+
+
+Ejecutó un comando, editó un archivo
+Ejecutó un comando, editó un archivo
+Regenero y valido:
+
+
+Regenerar y validar
+Regenerar y validar
+0 errores en 39 fórmulas. Ahora actualizo el dashboard:
+
+
+Ejecutó un comando, editó un archivo
+Ejecutó un comando, editó un archivo
+Muevo todo a outputs:
+
+
+Ejecutó un comando, archivo leído
+Ejecutó un comando, archivo leído
+Listo, Ricardo. Rotación de ropa final:
+
+Persona	Sem A	Sem B	Sem C
+Marcelo	+ Mamá	+ León	+ Sofía
+Sofía	+ Camila	+ Mamá	+ León
+Camila	+ León	+ Marcelo	+ Mamá
+Mamá (fijo)	Sábanas + hogar + Arantza + Papá	Igual	Igual
+Observación importante de balance: Mamá ahora carga 4 ropas distintas cada semana (sábanas, ropa de hogar, Arantza y Papá), mientras que Marcelo, Sofía y Camila cargan 2 (la suya + 1). Eso es operativamente desigual — Mamá ya tiene 42 tareas semanales y la ropa de Papá+Arantza añade volumen real, sobre todo si Papá usa varias mudas al gimnasio diariamente.
+
+Dos opciones sostenibles para la primera junta dominical:
+
+Mantener como está y ver en 2-3 semanas si Mamá llega bien al sábado por la tarde (es el día más cargado de ella: súper + ropa + plan de menú).
+Que Camila, Sofía o Marcelo absorban a Papá en el ciclo (no a Arantza, porque su ropa es ropa interior básicamente y conviene que vaya con la de hogar). Eso dejaría a Mamá con sábanas + hogar + Arantza únicamente — más balanceado.
+Mi recomendación es arrancar con la opción 1 tal cual está, observar el primer ciclo completo de 3 semanas, y si Mamá se ve sobrecargada, mover a Papá al ciclo en la junta dominical correspondiente. La salida más limpia sería agregar a Papá a la rotación pero invertida (Sem A: Marcelo+Papá, Sem B: Sofía+Papá, Sem C: Camila+Papá), así nadie se queda con doble carga las 3 semanas seguidas.
+
+¿Quieres que aplique esa opción 2 ahora, o lo dejamos así y avanzamos a la versión PDF imprimible para colgar en la cocina?
+
+
+Limpieza del hogar
+Hoja de cálculo · XLSX 
+
+Dashboard limpieza del hogar
+Código · JSX 
+Dijiste: falta lavar los trastes de la mañana, sacar basuras, limpiar el sofa, lavar baños,
+falta lavar los trastes de la mañana, sacar basuras, limpiar el sofa, lavar baños,
+
+10:44 p.m.
+Claude respondió: Buena observación, Ricardo.
+Buena observación, Ricardo. Esas son tareas críticas que faltaban. Antes de agregarlas necesito decisiones rápidas para asignarlas con la lógica correcta:
+
+Dijiste: P: Trastes del desayuno: ¿quién los lava?
+P: Trastes del desayuno: ¿quién los lava? Recuerda que Camila y Sofía salen al gym 6am y Mamá sale a llevar niños 7:30.
+R: Rotativo entre Marcelo/Camila/Sofía L-V
+
+P: ¿Qué tan seguido se saca la basura general de la casa?
+R: 3 veces por semana (lun, mié, vie)
+
+P: Limpieza del sofá (aspirar, quitar manchas, sacudir cojines): ¿cada cuándo?
+R: Cada sábado en limpieza profunda
+
+P: Baños: ¿cómo está distribuido el uso?
+R: hay 4 baños , 1 para mama y papa otro para Camila Sofia y Arantza otro para Leon y Marcelo y otro en la oficina
+
+10:46 p.m.
+Claude respondió: Perfecto, con esto puedo armar la lógica.
+Perfecto, con esto puedo armar la lógica. Te confirmo cómo voy a estructurarlo antes de codear:
+
+Trastes desayuno (rotativo L-V, al volver del gym/antes del colegio ~7:45):
+
+L → Camila · Mar → Sofía · Mié → Marcelo · Jue → Camila · Vie → Sofía
+Rotación clean: Marcelo solo 1x semana en desayuno (ya carga comida diaria + cena lun/jue), Camila y Sofía 2x cada una.
+Basura 3x semana (Lun/Mié/Vie): Marcelo ya tenía Lunes y Vie — agrego Mié explícito (ya estaba) y queda parejo.
+
+Sofá: cada sábado en limpieza profunda — agrego como tarea nueva en la mañana del sábado.
+
+Baños — 4 en total, asignados por uso:
+
+Baño	Usuarios	Quién limpia (mantenimiento entre semana)	Quién hace limpieza profunda (sábado)
+🛁 Baño Papá/Mamá	2 personas	Mamá lo mantiene	Mamá (sábado)
+🛁 Baño niñas (Camila/Sofía/Arantza)	3	Rotativo entre Camila y Sofía L-J	Camila (sábado)
+🛁 Baño niños (Marcelo/León)	2	Marcelo lo mantiene	Marcelo (sábado)
+🛁 Baño oficina (de visitas)	—	Una vez por semana	Sofía (sábado)
+Aplico:
+
+
+Crear v6 partiendo de v5
+Crear v6 partiendo de v5
+Primero actualizo el catálogo de tareas con las nuevas:
+
+
+Agregar nuevas tareas al catálogo: trastes desayuno, baños diferenciados, sofá
+Agregar nuevas tareas al catálogo: trastes desayuno, baños diferenciados, sofá
+Ahora agrego las nuevas asignaciones diarias. Primero LUNES (trastes desayuno + mantenimiento baño niños + basura ya estaba):
+
+
+Editó 2 archivos
+Editó 2 archivos
+Renombro "Sacar basura" del lunes para clarificar la frecuencia:
+
+
+Editó un archivo, ejecutó un comando
+Editó un archivo, ejecutó un comando
+Ah, la del lunes ya estaba como "Sacar basura" en el lunes, pero ahora veo que en la versión actual del v5/v6 está distribuida en lunes (21:30), miércoles (22:30) y viernes (21:30). Está bien, ya cumple los 3 días. Solo le actualizo el nombre a las dos restantes:
+
+
+Se ejecutaron 2 comandos
+Se ejecutaron 2 comandos
+Veo que la basura del lunes desapareció en algún punto. Voy a revisar el bloque del lunes:
+
+
+Ver el bloque del lunes
+Ver el bloque del lunes
+Confirmo que el lunes no tiene basura. Voy a agregarla. También veo el detalle para los demás días. Agrego basura al lunes:
+
+
+Agregar sacar basura el lunes en la noche
+Agregar sacar basura el lunes en la noche
+Ahora actualizo Mié y Vie con el nombre claro:
+
+
+Editó 2 archivos
+Editó 2 archivos
+Ahora ajusto MARTES (Sofía trastes desayuno + mantenimiento baño Mamá/Papá + baños niñas/niños):
+
+
+Editó 2 archivos
+Editó 2 archivos
+Ahora MIÉRCOLES (Marcelo trastes desayuno + segundo mantenimiento baños niñas):
+
+
+Editó 2 archivos
+Editó 2 archivos
+Ahora JUEVES (Camila trastes desayuno + segundo mantenimiento baño Mamá/Papá):
+
+
+Editó 2 archivos
+Editó 2 archivos
+Ahora VIERNES (Sofía trastes desayuno — Arantza ya no está):
+
+
+Viernes: Sofía trastes desayuno
+Viernes: Sofía trastes desayuno
+Veo el archivo para encontrar el bloque exacto:
+
+
+Ver el bloque del viernes
+Ver el bloque del viernes
+Veo la estructura. Agrego trastes desayuno del viernes después de la línea 311:
+
+
+Viernes: agregar trastes desayuno (Sofía)
+Viernes: agregar trastes desayuno (Sofía)
+Ahora SÁBADO (limpieza profunda 4 baños + sofá). Reemplazo el bloque de "Limpieza profunda baños" por las 4 limpiezas específicas + sofá:
+
+
+Sábado: dividir limpieza profunda baños en los 4 baños específicos + agregar sofá
+Sábado: dividir limpieza profunda baños en los 4 baños específicos + agregar sofá
+Quito la limpieza de baño compartido del miércoles (ya cubierta por mantenimientos rotativos):
+
+
+Se ejecutaron 2 comandos
+Se ejecutaron 2 comandos
+Ya está limpio. Ahora regenero y valido:
+
+
+Generar y validar v6
+Generar y validar v6
+0 errores. Verifico la nueva distribución:
+
+
+Verificar distribución y nuevas tareas
+Verificar distribución y nuevas tareas
+Todo encaja: 5 trastes desayuno (Camila 2x, Sofía 2x, Marcelo 1x), 6 mantenimientos de baños distribuidos L-J, 4 limpiezas profundas el sábado. Ahora actualizo el dashboard con los mismos cambios:
+
+
+Crear v7 partiendo de v6
+Crear v7 partiendo de v6
+Voy a generar las nuevas líneas en JSX (10 líneas nuevas: 5 trastes desayuno + 6 mantenimientos baños + 4 profundas + 1 sofá; reemplazar la profunda baños generic):
+
+
+Editó 12 archivos
+Editó 12 archivos
+Ahora el sábado: reemplazo la limpieza profunda baños genérica por las 4 específicas + sofá:
+
+
+Sábado dashboard: 4 baños específicos + sofá
+Sábado dashboard: 4 baños específicos + sofá
+Muevo todo a outputs:
+
+
+Ejecutó un comando, archivo leído
+Ejecutó un comando, archivo leído
+Listo, sistema final actualizado. Las 4 nuevas categorías de tareas quedaron así:
+
+🍳 Trastes desayuno (rotativo L-V, 7:35am):
+
+Lunes	Martes	Miércoles	Jueves	Viernes
+Camila	Sofía	Marcelo	Camila	Sofía
+Cada uno 1-2 veces por semana. Marcelo solo 1x porque ya carga el lavavajillas de comida y cena.
+
+🚮 Basura (3x semana, 21:30-22:30): Marcelo lunes, miércoles, viernes (los 3 días, ya estaba parcialmente, ahora explícito).
+
+🛁 Baños (4 baños distribuidos):
+
+Mantenimiento entre semana (10 min):
+
+Baño niñas (Cam/Sof/Ara): Camila lunes 18:15 + Sofía miércoles 16:45
+Baño niños (Mar/León): Marcelo lunes 18:15 + Marcelo miércoles 17:00
+Baño Papá/Mamá: Mamá martes 16:45 + Mamá jueves 16:45
+Baño oficina: solo limpieza profunda semanal
+Limpieza profunda (sábado 10:30-11:00, 25 min):
+
+Camila → baño niñas
+Marcelo → baño niños
+Mamá → baño Papá/Mamá
+Sofía → baño oficina
+🛋️ Sofá: Sofía sábado 11:30 (aspirar + cojines).
+
+Nueva distribución total:
+
+Persona	Tareas	Puntos	Cambio vs anterior
+Papá	16	77	igual
+Mamá	45	386	+3 (mant. baño 2x + profunda)
+Marcelo	25	152	+5 (trastes desayuno + baños + basura)
+Camila	28	117	+4 (trastes desayuno 2x + mant. + profunda)
+Sofía	29	129	+4 (trastes desayuno 2x + mant. + sofá + profunda)
+Arantza	11	50	igual
+León	15	65	igual
+Tres detalles importantes:
+
+Hay desbalance natural en mantenimiento de baños: el baño de niñas tiene 3 usuarios (más uso), el de niños 2 (Marcelo + León). Por eso Camila y Sofía dividen el mantenimiento de su baño en 2 días distintos, y Marcelo cubre el suyo solo (su baño, su responsabilidad). Mamá cubre el baño Papá/Mamá 2 veces porque también es chico y de uso doble adulto.
+El baño de la oficina solo se limpia los sábados — parece poco pero como es de visitas y casi no se usa entre semana, mantenerlo limpio profundamente 1x semana es suficiente. Si reciben visitas frecuentes, vale la pena agregar un mantenimiento extra los viernes.
+Marcelo subió a 25 tareas y 152 puntos — está sosteniendo casi el doble de lo que carga Camila o Sofía en lavavajillas pesados (comida + cena + un día de desayuno + 2 mantenimientos de baño + cambiar sábanas todas + acompañar al súper). Vale la pena que en la primera junta dominical revises si esa carga es justa o si conviene rotar el lavavajillas de comida también L-V.
+¿Avanzamos con el PDF imprimible para colgar en la cocina, o hay algo más que ajustar?
+
+
+Limpieza del hogar
+Hoja de cálculo · XLSX 
+
+Dashboard limpieza del hogar
+Código · JSX 
+Dijiste: quitale a mama actividades de limpieza de baño y comida del sabado esa la compra papa
+quitale a mama actividades de limpieza de baño y comida del sabado esa la compra papa
+
+11:37 p.m.
+Claude respondió: Perfecto, dos cambios bien claros.
+Perfecto, dos cambios bien claros. Aplico:
+
+
+Crear v7 partiendo de v6
+Crear v7 partiendo de v6
+Antes de moverle, necesito una decisión rápida sobre el baño Papá/Mamá:
+
+Dijiste: P: El baño de Papá/Mamá (mantenimiento mar/jue + limpieza profunda sábado): ¿a quién se lo paso?
+P: El baño de Papá/Mamá (mantenimiento mar/jue + limpieza profunda sábado): ¿a quién se lo paso?
+R: Marcelo, Camila o Sofia, actividad rotativa
+
+11:38 p.m.
+Claude respondió: Perfecto.
+Perfecto. Defino la rotación así para que cada uno tenga su semana:
+
+Baño Papá/Mamá — rotación de 3 semanas (mant. mar/jue + profunda sábado):
+
+Sem A	Sem B	Sem C
+Mantenimiento mar/jue + profunda sábado	Marcelo	Camila	Sofía
+Para que sea visible y operativo, voy a:
+
+Quitar las 2 tareas de mantenimiento + 1 profunda de Mamá (3 tareas).
+Agregar la columna en el dashboard que muestre quién cubre el baño Papá/Mamá según la semana de rotación.
+Cambiar "Súper sábado" de Mamá a Papá.
+Marcelo (acompañar al súper sábado) ya no aplica — cambiarlo por otra tarea o quitarlo.
+Sobre el #4, voy a aprovechar a que Marcelo absorba algo más útil ya que se libera de acompañar súper. Lo dejo como "Apoyar a Mamá con plan de comidas semanal" los sábados (tomando notas de qué falta de despensa) — así Mamá hace el plan más rápido y Papá tiene la lista clara para el súper.
+
+Aplico los cambios:
+
+
+Cambiar súper sábado de Mamá a Papá
+Cambiar súper sábado de Mamá a Papá
+Ahora cambio las tareas de baño Papá/Mamá a "Rotativo MCS" (Marcelo/Camila/Sofía). Para que el sistema sea utilizable sin tener que regenerar el archivo cada semana, las marcaré como rotativas y dejaré que el usuario asigne en el campo "Notas" quién cubre. Pero la mejor solución es que el sistema indique quién es según la semana de rotación de ropa — así reusamos el mismo selector A/B/C.
+
+Voy a usar Rotativo MCS como persona y agregar una nota explicativa:
+
+
+Editó 2 archivos
+Editó 2 archivos
+La respuesta de Claude fue interrumpida
+Dijiste: La actividad del super trasladala al domingo y si la hace mama y papa pero la comida del sabado esa se compra por papa
+La actividad del super trasladala al domingo y si la hace mama y papa pero la comida del sabado esa se compra por papa
+
+11:39 p.m.
+Claude respondió: Ah, mucho más limpio.
+Ah, mucho más limpio. Solo dos cambios concretos entonces:
+
+Súper / despensa: se mueve de sábado 17:00 → domingo (Mamá + Papá juntos)
+Comida del sábado (la del mediodía): Papá la compra en vez de cocinarla Mamá
+Lo demás queda intacto: los baños rotativos quedan así (Marcelo Sem A, Camila Sem B, Sofía Sem C).
+
+
+Encontrar las líneas exactas a modificar
+Encontrar las líneas exactas a modificar
+Veo que Marcelo "Apoyar a Mamá con lista" y Mamá Plan de comidas próxima semana están en el sábado pero no aparecieron en el grep. Veo el bloque del sábado:
+
+
+Ver bloque sábado completo
+Ver bloque sábado completo
+Veo todo. Aplico los cambios:
+
+1. Quitar la limpieza profunda baño Papá/Mamá de Mamá (línea 340) y dejarla rotativa MCS:
+
+
+Sábado: cambiar limpieza profunda baño Papá/Mamá de Mamá a rotativo MCS
+Sábado: cambiar limpieza profunda baño Papá/Mamá de Mamá a rotativo MCS
+2. Quitar Plan de comidas y Súper del sábado, mover al domingo + Papá compra comida sábado:
+
+
+Sábado: quitar plan/súper, agregar que Papá compra comida del mediodía
+Sábado: quitar plan/súper, agregar que Papá compra comida del mediodía
+3. Agregar al domingo el plan de comidas + súper (Mamá y Papá juntos):
+
+
+Ejecutó un comando, editó un archivo
+Ejecutó un comando, editó un archivo
+4. Cambiar comida del sábado en plan de comidas (sale de "Comida especial rotativa por chef" a "Comida comprada por Papá"):
+
+
+Plan comidas sábado: comida la compra Papá
+Plan comidas sábado: comida la compra Papá
+5. Quitar la comida principal de Mamá del sábado — ya no la cocina, Papá la compra. Veo el bloque de cocina del sábado:
+
+
+Ver tareas de Mamá y cocina sábado
+Ver tareas de Mamá y cocina sábado
+Mamá el sábado tiene: desayuno (9:00) + ropa (9:30) + ropa (19:00). Ya no cocina la comida (la compra Papá), ya no hace plan ni súper (movido al domingo). Perfecto.
+
+6. Agregar tareas post-comida sábado — alguien tiene que recoger la mesa después de que coman lo que Papá trajo:
+
+
+Agregar mesa+trastes post-comida del sábado
+Agregar mesa+trastes post-comida del sábado
+7. Actualizar nota del plan de comidas y la regla 4 (traslados se mantiene), agregar regla sobre baño Papá/Mamá rotativo:
+
+
+Actualizar nota del plan de comidas
+Actualizar nota del plan de comidas
+Agrego una regla nueva sobre el baño rotativo:
+
+
+Agregar regla sobre baño Papá/Mamá rotativo
+Agregar regla sobre baño Papá/Mamá rotativo
+Regenero y valido:
+
+
+Regenerar v7 y validar
+Regenerar v7 y validar
+0 errores. Verifico distribución final:
+
+
+Verificar distribución y bloques de fin de semana
+Verificar distribución y bloques de fin de semana
+Verifico que faltó cambiar el martes y jueves al rotativo (recordar, ya cambié sólo el sábado):
+
+
+Editó un archivo, ejecutó un comando
+Editó un archivo, ejecutó un comando
+Ah, el martes ya estaba cambiado. Solo falta el jueves:
+
+
+Jueves: cambiar mant baño Papá/Mamá a rotativo MCS
+Jueves: cambiar mant baño Papá/Mamá a rotativo MCS
+Regenero:
+
+
+Se ejecutaron 2 comandos
+Se ejecutaron 2 comandos
+Mamá bajó de 45 a 42 tareas (perdió 3: mantenimiento mar/jue + profunda sábado + cocina sábado). Papá subió de 16 a 19 (ganó 3: comprar comida sábado + plan domingo + súper domingo). Rotativo MCS tiene 3 tareas que se distribuyen entre Marcelo/Camila/Sofía según la semana A/B/C de la rotación de ropa.
+
+Ahora actualizo el dashboard con los mismos cambios:
+
+
+Editó 3 archivos, ejecutó un comando
+Editó 3 archivos, ejecutó un comando
+Ahora cambio el bloque sábado: comida, plan, súper:
+
+
+Sábado dashboard: cambiar comida-plan-súper
+Sábado dashboard: cambiar comida-plan-súper
+Y agrego el plan + súper al domingo:
+
+
+Domingo dashboard: agregar plan comidas + súper en pareja
+Domingo dashboard: agregar plan comidas + súper en pareja
+Actualizo plan de comidas del sábado en el dashboard:
+
+
+Plan comidas sábado en dashboard
+Plan comidas sábado en dashboard
+Actualizo el tip del plan de comidas:
+
+
+Actualizar tip del plan de comidas
+Actualizar tip del plan de comidas
+Ahora un detalle importante: si selecciono "Marcelo", "Camila" o "Sofía" en el dashboard, debería ver las tareas "Rotativo MCS" que le correspondan según la semana actual seleccionada. Implemento esa lógica:
+
+
+Filtrado: persona ve tareas Rotativo MCS si le toca esa semana
+Filtrado: persona ve tareas Rotativo MCS si le toca esa semana
+También agrego un indicador visual en la tarjeta de Marcelo/Camila/Sofía cuando esté la rotación activa:
+
+
+Banner cuando Marcelo/Camila/Sofía tiene rotativo de baño esta semana
+Banner cuando Marcelo/Camila/Sofía tiene rotativo de baño esta semana
+Muevo todo a outputs:
+
+
+Ejecutó un comando, archivo leído
+Ejecutó un comando, archivo leído
+Listo, sistema final con los ajustes:
+
+Cambios aplicados:
+
+Antes	Ahora
+Mamá: mant. baño Papá/Mamá mar + jue	Rotativo MCS (Marcelo Sem A, Camila Sem B, Sofía Sem C)
+Mamá: limpieza profunda baño Papá/Mamá sáb	Rotativo MCS (mismo ciclo)
+Mamá: comida sábado mediodía	Papá compra comida fuera (12:30 sáb)
+Mamá: plan menú sáb 16:00 + súper sáb 17:00	Domingo 11:00 plan + 12:00 súper, en pareja Papá+Mamá
+Marcelo: acompañar al súper sábado	(eliminado — ya no hay súper sábado)
+Distribución final:
+
+Persona	Tareas	Puntos	Cambio
+Papá	19	122	+3 (comida sáb + plan dom + súper dom)
+Mamá	42	364	-3 (le quitaron baño + cocina sáb)
+Papá o Mamá	6	48	igual
+Marcelo	25	152	igual neto (perdió súper, gana trastes comida sáb)
+Camila	29	120	igual (gana trastes comida sáb)
+Sofía	30	132	igual (gana trastes comida sáb)
+Arantza	11	50	igual
+León	15	65	igual
+Rotativo MCS	3	22	NUEVO — distribuido entre M/C/S por semana
+Tres detalles importantes:
+
+Rotativo MCS está acoplado a la rotación de ropa. Sem A → Marcelo cubre baño Papá/Mamá los 3 momentos (mar 16:45, jue 16:45, sáb 10:30). Sem B → Camila. Sem C → Sofía. Así nadie tiene que recordar nada extra: si esta semana le toca lavar la ropa de X persona, también le toca el baño de Papá/Mamá.
+Sábado al mediodía es ahora "comida fuera". Papá la compra a las 12:30, Camila pone la mesa, Sofía la recoge, Marcelo lava trastes. Mamá descansa de cocinar el sábado completo (solo hace el desayuno especial y la ropa).
+El domingo Papá y Mamá hacen pareja a las 11am: 1 hora para definir el menú de la semana, salen al súper a las 12:00 y vuelven a tiempo para que Mamá prepare la comida familiar a las 14:00. Es buen tiempo de pareja productivo + dejan el lunes listo de despensa.
+Indicador en el dashboard: cuando alguien (Marcelo, Camila o Sofía) esté seleccionado y le toque la rotación esa semana, aparece un banner azul: "Rotación de baño Papá/Mamá (Sem X): Esta semana te toca mantener (mar/jue) y limpieza profunda (sáb)." Sin ambigüedad.
+
+¿Hay algo más por ajustar antes de pasar al PDF imprimible para colgar en la cocina?
+
+
+Limpieza del hogar
+Hoja de cálculo · XLSX 
+
+Dashboard limpieza del hogar
+Código · JSX 
+Dijiste: ok, me agrada como lo publico ?
+ok, me agrada como lo publico ?
+
+12:04 a.m.
+Claude respondió: ¡Qué bueno que te gusta!
+¡Qué bueno que te gusta! Te explico las opciones de publicación según el caso de uso. Como tienes dos archivos diferentes (el Sheets y el Dashboard), cada uno se publica distinto:
+
+📊 Opción 1: Google Sheets (control familiar — recomendado para empezar)
+Esta es la fuente de verdad operativa. Ideal para que la familia marque ✓ y veas cumplimiento.
+
+Pasos:
+
+Abre drive.google.com → arrastra el archivo Limpieza_del_Hogar.xlsx
+Click derecho sobre el archivo → Abrir con → Google Sheets
+Una vez abierto, Archivo → Guardar como Google Sheets (esto convierte de Excel y mantiene las fórmulas)
+Click en Compartir (botón azul arriba a la derecha)
+Dos opciones para la familia:
+Por email: Agrega el correo de cada miembro con permiso "Editor"
+Por link: Click en "Cambiar a cualquier usuario con el enlace" → Editor → copia el link y mándalo al grupo de WhatsApp familiar
+📱 Opción 2: Dashboard interactivo (la app del celular)
+Para que la familia vea visualmente "¿qué me toca hoy?" en el celular. Tienes 3 caminos:
+
+Mi recomendación honesta antes de que decidas:
+
+Si esta es la primera vez que tu familia usa un sistema así → empieza solo con el Google Sheets y déjalo madurar 2-3 semanas. La regla de oro es: el sistema más complejo no le sirve a nadie si la familia no lo adopta. Un Sheets compartido por WhatsApp ya resuelve el 80% del problema (visibilidad + asignación clara + cumplimiento marcado).
+
+Si la familia es tech-friendly (los hijos en prepa probablemente sí) → puedes hacer Claude.ai Artifact en 5 minutos: abro el Dashboard_Limpieza_del_Hogar.jsx, lo pego en un nuevo chat de Claude pidiendo "renderiza esto como artifact", y al publicar el artifact obtienes un link tipo claude.ai/public/artifacts/abc123 que se ve perfecto en celular. Limitación importante: los datos del dashboard NO se guardan entre sesiones — cada miembro abre el link y empieza con todas las tareas sin marcar (el Sheets sigue siendo la memoria real).
+
+Si quieres una URL propia y persistencia real → GitHub Pages (gratis) o Vercel (gratis) son mejores, pero requieren 30-60 min de setup técnico inicial. Dado que tienes background técnico fuerte (BI, SAP, data engineering), no es un problema, pero sí toma tiempo.
+
+Cuéntame cuál opción prefieres y te doy los pasos exactos. ¿O quieres empezar solo con el Google Sheets y vemos el dashboard después?
+
+Dijiste: P: ¿Cómo prefieres publicar el dashboard interactivo?
+P: ¿Cómo prefieres publicar el dashboard interactivo?
+R: como github pages ya que no todos tienen claude
+
+12:05 a.m.
+Claude respondió: Excelente decisión.
+Excelente decisión. GitHub Pages es perfecto para esto: URL pública, gratis, funciona en cualquier celular sin login, y tú controlas el contenido. Te guío paso a paso.
+
+Importante antes de empezar: GitHub Pages sirve archivos estáticos (HTML/CSS/JS), pero el dashboard que te di es un componente React .jsx que necesita ser compilado primero. Te doy dos rutas:
+
+🛤️ Ruta A: Sencilla (recomendada) — Vite + GitHub Pages
+Una sola vez configuras el proyecto, después solo subes cambios. Te lleva ~30 minutos la primera vez.
+
+🛤️ Ruta B: Más sencilla aún — HTML standalone
+Te genero un único archivo index.html que ya trae React + Tailwind precompilados desde CDN. Lo subes a GitHub y listo. ~10 minutos.
+
+Como es la primera vez y queremos que funcione rápido, voy con la Ruta B — te genero el HTML standalone listo para subir:
+
+
+Confirmar estructura del componente
+Confirmar estructura del componente
+Genero el HTML standalone con persistencia local (localStorage) para que las marcas ✓ se guarden por dispositivo:
+
+
+Crear el index.html standalone con React/Tailwind/Babel desde CDN, listo para GitHub Pages
+Crear el index.html standalone con React/Tailwind/Babel desde CDN, listo para GitHub Pages
+Verifico que no haya errores básicos de sintaxis:
+
+
+Validar el HTML generado
+Validar el HTML generado
+Todo correcto. Genero también un README simple con las instrucciones de publicación, para que tengas todo en un solo lugar:
+
+
+Creó un archivo, ejecutó un comando, archivo leído
+Creó un archivo, ejecutó un comando, archivo leído
+Listo, Ricardo. Te dejo el paquete completo:
+
+📄 index.html — Dashboard standalone (todo en un solo archivo, listo para subir a GitHub Pages) 📄 README.md — Instrucciones paso a paso para publicarlo 📊 Limpieza_del_Hogar.xlsx — Google Sheets maestro (la fuente de verdad)
+
+🚀 Pasos rápidos para publicar (≈10 minutos):
+Crea cuenta en github.com si no tienes
+New repository → nómbralo limpieza-hogar → Public → Add README → Create
+Add file → Upload files → arrastra el index.html → Commit changes
+Settings → Pages → Branch: main → folder: / (root) → Save
+Espera 1-2 min y obtienes una URL tipo https://TU-USUARIO.github.io/limpieza-hogar/
+📱 Para la familia (después de publicar):
+Mándales la URL por WhatsApp. En el celular, que abran el link y agreguen el ícono a la pantalla de inicio:
+
+iPhone (Safari): botón compartir → "Añadir a pantalla de inicio"
+Android (Chrome): menú ⋮ → "Añadir a pantalla principal"
+Así parece una app nativa.
+
+🎯 Tres cosas importantes que sepas:
+Las marcas ✓ se guardan por dispositivo (en localStorage del navegador). Camila marca en su celular, Sofía en el suyo. No es base de datos compartida — para eso sigue sirviendo el Google Sheets, que es la fuente de verdad oficial donde Papá ve el cumplimiento global.
+La semana de rotación (A/B/C) se guarda automática — quien la cambie, queda guardada en su dispositivo. Pero recomiendo que solo Papá la cambie los domingos en la junta familiar, y le avise a la familia para que todos cambien la misma en sus dispositivos.
+Los cambios al sistema se hacen editando index.html en GitHub directamente. Si dentro de un mes deciden ajustar tareas (lo cual va a pasar), entras al repositorio, le das clic al lápiz ✏️ sobre el archivo, modificas y commit. En 2 minutos se actualiza para todos.
+¿Quieres que te ayude con algo del proceso de publicación, o prefieres que cuando ya esté publicada me mandes la URL para revisar que todo se vea bien?
+
+
+Index
+Código · HTML 
+
+Readme
+Documento · MD 
+
+Limpieza del hogar
+Hoja de cálculo · XLSX 
+Dijiste: Y como hago para que las tareas actualicen el google sheet?
+Y como hago para que las tareas actualicen el google sheet?
+
+12:20 a.m.
+Claude respondió: Excelente pregunta — eso es lo que convierte al sistema en algo verdaderamente útil.
+Excelente pregunta — eso es lo que convierte al sistema en algo verdaderamente útil. Te explico las opciones honestamente porque cada una tiene trade-offs reales:
+
+🛤️ Opciones para sincronizar el dashboard con Google Sheets
+Antes de que decidas, déjame explicarte cada opción con honestidad. Como tienes background técnico fuerte (BI, SAP, data engineering), entenderás bien los trade-offs:
+
+📊 Comparativa real
+Opción	Setup	Costo	Pros	Contras
+Google Apps Script	30 min	$0	Mismo ecosistema Google · Endpoint HTTPS · No requiere otra cuenta · Tú controlas el script	Quotas (20K llamadas/día) · Latencia 1-3 seg · Deploy manual cada cambio
+Firebase Realtime DB	1 hora	$0 hasta 1GB/100 conexiones simultáneas	Sincronización en vivo entre dispositivos · Marcas aparecen al instante en otro celular · Robusto	Requiere otra cuenta Google · Sheets queda como reporte, no como DB · Más piezas que mantener
+Supabase	1 hora	$0 hasta 500MB	PostgreSQL real · Auth nativo · Más profesional	Sobre-ingeniería para esta familia · Requiere otra cuenta · Aprender RLS
+Google Forms → Sheet	10 min	$0	Súper simple · Nativo · Sin código	UX horrible para marcar tareas · No es app · Pierde el dashboard
+🎯 Mi recomendación honesta
+Para tu caso específico (familia, no equipo de software, queremos adopción rápida), te recomiendo Google Apps Script. Razones:
+
+Mismo ecosistema: ya tienes el Sheet, ya tienes cuenta Google. No hay que aprender ni administrar otra plataforma.
+El Sheet sigue siendo la fuente de verdad — exactamente como lo diseñamos. Las marcas del dashboard se escriben directo en una columna del Sheet.
+Tú controlas el código y puedes adaptarlo. Sabes JavaScript, Apps Script es JavaScript.
+Sincronización entre celulares automática: cuando Camila marca ✓ en su celular, el Sheet se actualiza, y al refrescar Sofía en el suyo lo ve. No es real-time pero es bidireccional (1-2 seg).
+Auditoría incluida: podemos guardar en una hoja "Log" quién marcó qué y cuándo. Eso es oro para la junta dominical.
+El único contra real: los hijos no tienen "login". Vas a confiar en que cada uno seleccione su nombre antes de marcar. Para una familia funciona; para una empresa no.
+
+⚠️ Una decisión importante antes de codear
+Antes de que respondas, te voy a recomendar tomar una decisión más a futuro. Si vas a invertir 30-60 minutos en hacer esto bien, vale la pena considerar también esto:
+
+🤔 Tres caminos según ambición del proyecto
+🟢 Camino A — MVP rápido (1 hora total):
+
+Apps Script
+Identidad: solo selección de nombre (sin PIN)
+Sincronización: actualiza columna 'Hecho' + agrega al Log
+Listo para usarse hoy
+🟡 Camino B — Sólido familiar (2-3 horas):
+
+Apps Script + PIN de 4 dígitos por persona
+Vista de Papá ve TODOS los marcajes; los hijos solo el suyo
+Notificaciones push cuando toca tarea (Service Worker básico)
+Dashboard semanal con tendencia
+🔴 Camino C — Sistema serio (1 día):
+
+Supabase con auth real
+Notificaciones push reales (FCM)
+Histórico de 4 semanas con gráficas
+Multi-dispositivo en tiempo real
+App PWA instalable
+Mi recomendación honesta: vayamos por el Camino A primero. La razón es brutalmente simple — el 80% de los sistemas familiares mueren en las primeras 3 semanas no por falta de features, sino porque la familia no los adopta. Si en 3 semanas la familia está usándolo activamente, evolucionamos a B. Si no, no perdimos un día construyendo el C.
+
+Cuéntame:
+
+¿Empezamos con el Camino A (escribe a 'Hecho' + Log, sin PIN)?
+¿O prefieres otra ruta?
+Si me dices "vamos con A", te genero ahora mismo:
+
+El script de Google Apps Script listo para pegar
+El index.html actualizado que sincroniza con el Sheet
+Una hoja 09_Log agregada al Excel para que tengas auditoría
+Instrucciones paso a paso
+¿Te parece?
+
+Dijiste: P: Hay varios caminos.
+P: Hay varios caminos. ¿Cuál prefieres explorar?
+R: Google Apps Script (gratis, ~30 min setup, recomendado)
+
+12:21 a.m.
+Claude respondió: Perfecto, vamos por Apps Script.
+Perfecto, vamos por Apps Script. Voy a generar el paquete completo:
+
+Agregar hoja 09_Log al Excel para auditoría
+Generar el script de Apps Script
+Actualizar el index.html para sincronizar con el Sheet
+Crear instrucciones paso a paso
+Empiezo con la hoja Log en el Excel:
+
+
+Se ejecutaron 2 comandos, editó un archivo
+Se ejecutaron 2 comandos, editó un archivo
+Ahora creo el script de Apps Script:
+
+
+Crear el script de Google Apps Script para sincronización bidireccional
+Crear el script de Google Apps Script para sincronización bidireccional
+Ahora actualizo el index.html para que sincronice con el Apps Script. Voy a agregar:
+
+Campo de configuración de URL del API
+Selector de "quién soy" (para auditoría sin PIN)
+Sincronización al cargar (GET) y al marcar (POST)
+Indicador visual de sincronización
+
+Copiar HTML para modificar
+Copiar HTML para modificar
+Voy a modificar el bloque de estado del Dashboard para incluir lógica de sincronización. Primero el setup de estado:
+
+
+Agregar estado para URL del API y sincronización
+Agregar estado para URL del API y sincronización
+Ahora arreglo la llamada a toggleTarea para que pase la tarea completa:
+
+
+Pasar la tarea completa a toggleTarea para POST al Sheet
+Pasar la tarea completa a toggleTarea para POST al Sheet
+Ahora agrego el indicador de sincronización en el header y el panel de configuración. Modifico el header:
+
+
+Agregar indicador de sync y botón de config en el header
+Agregar indicador de sync y botón de config en el header
+Y actualizo el footer para que mencione la sync:
+
+
+Actualizar footer con info de sync
+Actualizar footer con info de sync
+Verifico que el HTML quedó válido:
+
+
+Validar HTML actualizado
+Validar HTML actualizado
+Todo OK. Ahora creo un README específico para esta integración:
+
+
+README con instrucciones específicas para conectar Apps Script
+README con instrucciones específicas para conectar Apps Script
+Ahora muevo todo a outputs:
+
+
+Ejecutó un comando, archivo leído
+Ejecutó un comando, archivo leído
+Listo, Ricardo. Te dejo el paquete completo:
+
+📦 5 archivos en total
+Archivo	Para qué sirve
+Limpieza_del_Hogar.xlsx	Excel maestro (con nueva hoja 09_Log para auditoría)
+apps_script.js	Script para pegar en Google Apps Script (el "puente")
+index.html	Dashboard nuevo con sincronización (botón ⚙️ en header)
+SYNC_GUIDE.md	Guía paso a paso para conectar todo
+README.md	Instrucciones generales para GitHub Pages
+🎯 Flujo completo de instalación (≈45 min)
+Excel → Google Sheet: subes el .xlsx a Drive, lo conviertes a Sheets nativo
+Sheet → Apps Script: Extensiones → Apps Script → pegas el código → Implementar como Web App → "Cualquier usuario" → copias la URL
+GitHub Pages: subes el index.html (mismos pasos del README anterior)
+Conectar: abres el dashboard, clic en ⚙️, pegas la URL del Apps Script, "Sincronizar ahora"
+Familia: mandas la URL del dashboard al WhatsApp familiar; cada uno configura una sola vez la URL del API en su celular
+✨ Lo que cambia con esta integración
+Antes: Cada celular tenía su propio estado (Camila marca en su celular, Sofía no se entera).
+
+Ahora:
+
+Camila marca ✓ en su celular → el Sheet se actualiza en 2 seg → en máximo 60 seg Sofía ve el cambio en su celular
+En el Sheet aparece el ✓ en columna Hecho
+En la hoja 09_Log queda registro: timestamp, persona, tarea, dispositivo
+Indicador visual en el header: 🟢 sync · 🟡 syncing · 🔴 error · ⚪ local (sin URL)
+⚠️ Tres detalles importantes
+El selector de "persona activa" del dashboard ahora importa para auditoría. Si Camila tiene seleccionado "Camila" cuando marca, en el Log aparece "Camila" como quien marcó. Si tiene "Toda la familia", aparece "desconocido". Vale la pena que cada miembro deje su nombre seleccionado siempre.
+No es real-time, es 60 segundos. Si necesitas que Sofía vea inmediatamente lo que marcó Camila, dale al botón "🔄 Sincronizar ahora" en el panel de configuración. La justificación: real-time requiere WebSockets, lo cual no soporta Apps Script gratis.
+El paso más delicado es el #3 de la guía — donde Google te avisa "esta aplicación no está verificada". Es tu propio script, está bien continuar. La guía explica exactamente dónde hacer clic.
+¿Quieres que te ayude con algo del proceso, o vas a probar instalarlo y me cuentas si algo no jala?
+
+
+Sync guide
+Documento · MD 
+
+Apps script
+JS 
+
+Index
+Código · HTML 
+
+Limpieza del hogar
+Hoja de cálculo · XLSX 
+
+Readme
+Documento · MD 
+
+
+
+
+Claude es IA y puede cometer errores. Por favor, verifica nuevamente las respuestas.
+Index · HTML
+Copiar
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -5,23 +1368,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="theme-color" content="#c2410c" />
   <title>Limpieza del Hogar — Casa Benavente</title>
-
+ 
   <!-- React + Babel desde CDN -->
   <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-
+ 
   <!-- Tailwind via CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-
+ 
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
-
+ 
   <!-- Fuentes -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,800&display=swap" rel="stylesheet">
-
+ 
   <style>
     body { font-family: 'Outfit', system-ui, sans-serif; margin: 0; background: #fafaf9; }
     .font-display { font-family: 'Fraunces', Georgia, serif; font-feature-settings: "ss01"; }
@@ -33,10 +1396,10 @@
 </head>
 <body>
   <div id="root"></div>
-
+ 
   <script type="text/babel" data-type="module">
     const { useState, useMemo, useEffect } = React;
-
+ 
     // Helper para iconos lucide (svg inline)
     const Icon = ({ name, className = "w-4 h-4", strokeWidth = 2 }) => {
       const ref = React.useRef(null);
@@ -51,7 +1414,7 @@
       }, [name]);
       return <span ref={ref} className={className + " inline-flex items-center justify-center"} />;
     };
-
+ 
     const FAMILIA = [
       { id: 'papa',    nombre: 'Papá',    emoji: '👔',  color: 'from-slate-700 to-slate-900',  rol: 'Supervisor + Logística' },
       { id: 'mama',    nombre: 'Mamá',    emoji: '👩‍🍳', color: 'from-rose-500 to-pink-600',    rol: 'Chef + Logística niños' },
@@ -61,13 +1424,13 @@
       { id: 'arantza', nombre: 'Arantza', emoji: '🧒',  color: 'from-amber-500 to-orange-600', rol: 'Tareas ligeras (L-J)' },
       { id: 'leon',    nombre: 'León',    emoji: '👦',  color: 'from-sky-500 to-cyan-600',     rol: 'Tareas ligeras' },
     ];
-
+ 
     const ROTACION_ROPA = {
       'Sem A': { Marcelo: 'Marcelo + Mamá',  Sofía: 'Sofía + Camila', Camila: 'Camila + León',   Mamá: 'Sábanas + hogar + Arantza + Papá' },
       'Sem B': { Marcelo: 'Marcelo + León',  Sofía: 'Sofía + Mamá',   Camila: 'Camila + Marcelo',Mamá: 'Sábanas + hogar + Arantza + Papá' },
       'Sem C': { Marcelo: 'Marcelo + Sofía', Sofía: 'Sofía + León',   Camila: 'Camila + Mamá',   Mamá: 'Sábanas + hogar + Arantza + Papá' },
     };
-
+ 
     const ASIGNACIONES = [
       // LUNES
       {dia:'Lunes',persona:'Papá',cat:'Personal',tarea:'Gimnasio (con Camila y Sofía)',hora:'06:00',pts:0},
@@ -100,7 +1463,7 @@
       {dia:'Lunes',persona:'Arantza',cat:'Otros',tarea:'Revisar mochila + uniforme',hora:'22:00',pts:5},
       {dia:'Lunes',persona:'León',cat:'Otros',tarea:'Revisar mochila + uniforme',hora:'22:00',pts:5},
       {dia:'Lunes',persona:'Papá',cat:'Supervisión',tarea:'Revisión cumplimiento del día',hora:'22:30',pts:5},
-
+ 
       // MARTES
       {dia:'Martes',persona:'Papá',cat:'Personal',tarea:'Gimnasio (con Camila y Sofía)',hora:'06:00',pts:0},
       {dia:'Martes',persona:'Camila',cat:'Personal',tarea:'Gimnasio',hora:'06:00',pts:0},
@@ -130,7 +1493,7 @@
       {dia:'Martes',persona:'Arantza',cat:'Otros',tarea:'Revisar mochila + uniforme',hora:'22:00',pts:5},
       {dia:'Martes',persona:'León',cat:'Otros',tarea:'Revisar mochila + uniforme',hora:'22:00',pts:5},
       {dia:'Martes',persona:'Papá',cat:'Supervisión',tarea:'Revisión cumplimiento del día',hora:'22:30',pts:5},
-
+ 
       // MIÉRCOLES
       {dia:'Miércoles',persona:'Papá',cat:'Personal',tarea:'Gimnasio (con Camila y Sofía)',hora:'06:00',pts:0},
       {dia:'Miércoles',persona:'Camila',cat:'Personal',tarea:'Gimnasio',hora:'06:00',pts:0},
@@ -161,7 +1524,7 @@
       {dia:'Miércoles',persona:'León',cat:'Otros',tarea:'Revisar mochila + uniforme',hora:'22:00',pts:5},
       {dia:'Miércoles',persona:'Marcelo',cat:'Limpieza',tarea:'Sacar basura (lun/mié/vie)',hora:'22:30',pts:3},
       {dia:'Miércoles',persona:'Papá',cat:'Supervisión',tarea:'Revisión cumplimiento del día',hora:'22:45',pts:5},
-
+ 
       // JUEVES
       {dia:'Jueves',persona:'Papá',cat:'Personal',tarea:'Gimnasio (con Camila y Sofía)',hora:'06:00',pts:0},
       {dia:'Jueves',persona:'Camila',cat:'Personal',tarea:'Gimnasio',hora:'06:00',pts:0},
@@ -192,7 +1555,7 @@
       {dia:'Jueves',persona:'Arantza',cat:'Otros',tarea:'Empacar maleta de fin de semana',hora:'22:05',pts:5},
       {dia:'Jueves',persona:'León',cat:'Otros',tarea:'Revisar mochila + uniforme',hora:'22:00',pts:5},
       {dia:'Jueves',persona:'Papá',cat:'Supervisión',tarea:'Revisión cumplimiento del día',hora:'22:45',pts:5},
-
+ 
       // VIERNES (Arantza ya no está)
       {dia:'Viernes',persona:'Papá',cat:'Personal',tarea:'Gimnasio (con Camila y Sofía)',hora:'06:00',pts:0},
       {dia:'Viernes',persona:'Camila',cat:'Personal',tarea:'Gimnasio',hora:'06:00',pts:0},
@@ -216,7 +1579,7 @@
       {dia:'Viernes',persona:'Marcelo',cat:'Limpieza',tarea:'Sacar basura (lun/mié/vie)',hora:'21:30',pts:3},
       {dia:'Viernes',persona:'Sofía',cat:'Otros',tarea:'Recoger sala antes del finde',hora:'21:30',pts:4},
       {dia:'Viernes',persona:'Papá',cat:'Supervisión',tarea:'Revisión cumplimiento del día',hora:'22:00',pts:5},
-
+ 
       // SÁBADO
       {dia:'Sábado',persona:'Papá',cat:'Traslado',tarea:'Llevar Camila a prepa (7:00am)',hora:'07:00',pts:8},
       {dia:'Sábado',persona:'Mamá',cat:'Cocina',tarea:'Desayuno especial',hora:'09:00',pts:10},
@@ -245,7 +1608,7 @@
       {dia:'Sábado',persona:'Camila',cat:'Ropa',tarea:'Doblar y guardar carga rotativa',hora:'19:00',pts:10},
       {dia:'Sábado',persona:'Mamá',cat:'Ropa',tarea:'Doblar sábanas y ropa de hogar',hora:'19:00',pts:8},
       {dia:'Sábado',persona:'Papá',cat:'Supervisión',tarea:'Revisión limpieza profunda + rotación ropa',hora:'20:00',pts:5},
-
+ 
       // DOMINGO
       {dia:'Domingo',persona:'Mamá',cat:'Cocina',tarea:'Plan de comidas próxima semana',hora:'11:00',pts:15},
       {dia:'Domingo',persona:'Papá',cat:'Cocina',tarea:'Plan de comidas próxima semana (con Mamá)',hora:'11:00',pts:15},
@@ -263,7 +1626,7 @@
       {dia:'Domingo',persona:'Papá o Mamá',cat:'Traslado',tarea:'Recoger Arantza (9:00pm)',hora:'21:00',pts:8},
       {dia:'Domingo',persona:'Papá',cat:'Supervisión',tarea:'Junta familiar de revisión semanal',hora:'20:00',pts:15},
     ];
-
+ 
     const COMIDAS = [
       { dia:'Lunes',     desayuno:'Fruta + huevo + pan tostado',     comida:'Pollo a la plancha + arroz + ensalada', cena:'9:30 pm: quesadillas + verdura' },
       { dia:'Martes',    desayuno:'Avena + plátano + leche',          comida:'Espagueti rojo + pollo + ensalada',     cena:'9:30 pm: sopa + sándwich' },
@@ -273,7 +1636,7 @@
       { dia:'Sábado',    desayuno:'Huevos rancheros + frijoles',        comida:'Comprada por Papá (afuera)',            cena:'8:00 pm: libre / pedido' },
       { dia:'Domingo',   desayuno:'Pan dulce + fruta + leche',          comida:'Comida familiar',                       cena:'8:00 pm: sopa caldosa + sándwich' },
     ];
-
+ 
     const CAT_COLORS = {
       Cocina:'bg-amber-50 text-amber-900 border-amber-200',
       Ropa:'bg-purple-50 text-purple-900 border-purple-200',
@@ -288,7 +1651,7 @@
       Traslado:'bg-violet-500',Supervisión:'bg-slate-700',Personal:'bg-yellow-500',Otros:'bg-stone-500',
     };
     const DIAS = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
-
+ 
     function getStorageKey() {
       // Persistencia por semana ISO
       const d = new Date();
@@ -298,7 +1661,7 @@
       const wk = Math.ceil((((d - new Date(year,0,1)) / 86400000) + 1)/7);
       return `limpieza_hogar_${year}W${wk}`;
     }
-
+ 
     function Dashboard() {
       const [personaActiva, setPersonaActiva] = useState('todos');
       const [diaActivo, setDiaActivo] = useState(() => {
@@ -316,19 +1679,94 @@
         try { return localStorage.getItem('semana_ropa') || 'Sem A'; }
         catch { return 'Sem A'; }
       });
-
+ 
+      // ===== Sincronización con Google Sheets =====
+      const [apiUrl, setApiUrl] = useState(() => {
+        try { return localStorage.getItem('api_url') || ''; }
+        catch { return ''; }
+      });
+      const [showConfig, setShowConfig] = useState(false);
+      const [syncStatus, setSyncStatus] = useState('idle'); // idle | syncing | ok | error
+      const [lastSync, setLastSync] = useState(null);
+ 
+      // Cargar estado desde el Sheet al iniciar y cada 60s
+      const cargarDesdeSheet = async () => {
+        if (!apiUrl) return;
+        setSyncStatus('syncing');
+        try {
+          const r = await fetch(apiUrl, { method: 'GET', redirect: 'follow' });
+          const data = await r.json();
+          if (data.ok && data.marcadas) {
+            setCompletadas(data.marcadas);
+            setSyncStatus('ok');
+            setLastSync(new Date());
+          } else {
+            setSyncStatus('error');
+          }
+        } catch (err) {
+          console.error('Error cargando desde Sheet:', err);
+          setSyncStatus('error');
+        }
+      };
+ 
+      useEffect(() => {
+        cargarDesdeSheet();
+        const interval = setInterval(cargarDesdeSheet, 60000);
+        return () => clearInterval(interval);
+      }, [apiUrl]);
+ 
       useEffect(() => {
         try { localStorage.setItem(getStorageKey(), JSON.stringify(completadas)); } catch {}
       }, [completadas]);
-
+ 
       useEffect(() => {
         try { localStorage.setItem('semana_ropa', semanaRopa); } catch {}
       }, [semanaRopa]);
-
+ 
+      useEffect(() => {
+        try { localStorage.setItem('api_url', apiUrl); } catch {}
+      }, [apiUrl]);
+ 
       useEffect(() => { if (window.lucide) window.lucide.createIcons(); });
-
-      const toggleTarea = (key) => setCompletadas(p => ({...p, [key]: !p[key]}));
-
+ 
+      // Marcar/desmarcar tarea (optimista + sync al Sheet)
+      const toggleTarea = async (key, tarea) => {
+        const eraCompleta = completadas[key];
+        const nuevaCompleta = !eraCompleta;
+ 
+        // Optimista: actualizar UI inmediato
+        setCompletadas(p => ({...p, [key]: nuevaCompleta}));
+ 
+        // Sincronizar con Sheet si hay URL configurada
+        if (apiUrl && tarea) {
+          setSyncStatus('syncing');
+          try {
+            const quien = personaActiva !== 'todos'
+              ? FAMILIA.find(f => f.id === personaActiva)?.nombre || 'desconocido'
+              : 'desconocido';
+            const dispositivo = navigator.userAgent.match(/iPhone|Android|iPad/)?.[0] || 'web';
+            await fetch(apiUrl, {
+              method: 'POST',
+              mode: 'no-cors', // Apps Script requiere esto
+              headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+              body: JSON.stringify({
+                dia: tarea.dia,
+                persona: tarea.persona,
+                tarea: tarea.tarea,
+                accion: nuevaCompleta ? 'marcar' : 'desmarcar',
+                quien: quien,
+                dispositivo: dispositivo
+              })
+            });
+            setSyncStatus('ok');
+            setLastSync(new Date());
+          } catch (err) {
+            console.error('Error sincronizando:', err);
+            setSyncStatus('error');
+          }
+        }
+      };
+ 
       const tareasFiltradas = useMemo(() => {
         const rotMCS = { 'Sem A': 'Marcelo', 'Sem B': 'Camila', 'Sem C': 'Sofía' };
         const personaRotativaActiva = rotMCS[semanaRopa];
@@ -349,7 +1787,7 @@
           return matchPersona && matchDia;
         }).sort((a,b) => a.hora.localeCompare(b.hora));
       }, [personaActiva, diaActivo, vista, semanaRopa]);
-
+ 
       const puntajePorPersona = useMemo(() => {
         return FAMILIA.filter(f => f.id !== 'papa' && f.id !== 'mama').map(p => {
           const tareas = ASIGNACIONES.filter(t => t.persona === p.nombre);
@@ -360,24 +1798,42 @@
             pct: tareas.length ? Math.round((completas.length / tareas.length) * 100) : 0 };
         });
       }, [completadas]);
-
+ 
       const cumplimientoFamiliar = useMemo(() => {
         const operativas = ASIGNACIONES.filter(t => t.persona !== 'Papá' && t.cat !== 'Personal');
         const hechas = operativas.filter(t => completadas[`${t.dia}-${t.persona}-${t.tarea}`]).length;
         return operativas.length ? Math.round((hechas / operativas.length) * 100) : 0;
       }, [completadas]);
-
+ 
       const personaSel = FAMILIA.find(f => f.id === personaActiva);
       const rotMCS = { 'Sem A': 'Marcelo', 'Sem B': 'Camila', 'Sem C': 'Sofía' };
-
+ 
       return (
         <div className="min-h-screen bg-stone-50">
           <header className="bg-gradient-to-br from-rose-600 via-orange-600 to-amber-500 text-white relative overflow-hidden">
             <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 20% 50%, white 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
             <div className="relative max-w-5xl mx-auto px-5 pt-8 pb-6">
-              <div className="flex items-center gap-2 text-rose-100 text-sm font-medium tracking-wider uppercase">
-                <Icon name="home" className="w-4 h-4" />
-                Limpieza del Hogar
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2 text-rose-100 text-sm font-medium tracking-wider uppercase">
+                  <Icon name="home" className="w-4 h-4" />
+                  Limpieza del Hogar
+                </div>
+                <div className="flex items-center gap-2">
+                  {apiUrl && (
+                    <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${
+                      syncStatus === 'ok' ? 'bg-emerald-400 text-emerald-900' :
+                      syncStatus === 'syncing' ? 'bg-amber-300 text-amber-900' :
+                      syncStatus === 'error' ? 'bg-red-400 text-red-900' :
+                      'bg-white/30 text-white'
+                    }`}>
+                      {syncStatus === 'ok' ? '● sync' : syncStatus === 'syncing' ? '● syncing' : syncStatus === 'error' ? '● error' : '● local'}
+                    </span>
+                  )}
+                  <button onClick={() => setShowConfig(!showConfig)}
+                    className="text-white/80 hover:text-white text-sm bg-white/10 hover:bg-white/20 rounded-lg px-2 py-1">
+                    ⚙️
+                  </button>
+                </div>
               </div>
               <h1 className="font-display text-4xl sm:text-5xl font-extrabold mt-2 leading-tight">
                 ¿Qué me toca <span className="italic">hoy</span>?
@@ -385,7 +1841,48 @@
               <p className="text-rose-50/90 mt-2 text-sm sm:text-base">Sistema operativo del hogar — roles definidos, rotación de ropa, traslados coordinados.</p>
             </div>
           </header>
-
+ 
+          {showConfig && (
+            <section className="max-w-5xl mx-auto px-5 mt-3">
+              <div className="bg-white rounded-2xl card-shadow p-4 border-2 border-amber-300">
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="font-bold text-stone-900">⚙️ Configuración de sincronización</h3>
+                  <button onClick={() => setShowConfig(false)} className="text-stone-400 hover:text-stone-600">✕</button>
+                </div>
+                <p className="text-xs text-stone-600 mb-3">
+                  Pega la URL de tu Apps Script para sincronizar las marcas con el Google Sheet de la familia.
+                </p>
+                <input
+                  type="text"
+                  value={apiUrl}
+                  onChange={(e) => setApiUrl(e.target.value)}
+                  placeholder="https://script.google.com/macros/s/.../exec"
+                  className="w-full px-3 py-2 border border-stone-300 rounded-lg text-sm font-mono"
+                />
+                <div className="flex gap-2 mt-3">
+                  <button onClick={cargarDesdeSheet}
+                    className="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold py-2 rounded-lg">
+                    🔄 Sincronizar ahora
+                  </button>
+                  <button onClick={() => { setApiUrl(''); setShowConfig(false); }}
+                    className="bg-stone-200 hover:bg-stone-300 text-stone-700 text-sm font-semibold py-2 px-4 rounded-lg">
+                    Quitar
+                  </button>
+                </div>
+                {lastSync && (
+                  <p className="text-[10px] text-stone-500 mt-2">
+                    Última sincronización: {lastSync.toLocaleTimeString('es-MX')}
+                  </p>
+                )}
+                {!apiUrl && (
+                  <p className="text-xs text-amber-700 mt-3 bg-amber-50 p-2 rounded">
+                    ℹ️ Sin URL configurada: las marcas se guardan solo en este dispositivo.
+                  </p>
+                )}
+              </div>
+            </section>
+          )}
+ 
           <section className="max-w-5xl mx-auto px-5 -mt-4 relative z-10">
             <div className="bg-white rounded-2xl card-shadow p-3">
               <div className="flex gap-2 overflow-x-auto scroll-hide pb-1">
@@ -407,7 +1904,7 @@
               </div>
             </div>
           </section>
-
+ 
           {personaSel && (
             <section className="max-w-5xl mx-auto px-5 mt-3">
               <div className={`rounded-2xl p-4 bg-gradient-to-br ${personaSel.color} text-white card-shadow flex items-center gap-3`}>
@@ -443,7 +1940,7 @@
               )}
             </section>
           )}
-
+ 
           <nav className="max-w-5xl mx-auto px-5 mt-4">
             <div className="flex gap-1 bg-white p-1 rounded-xl card-shadow">
               {[
@@ -463,7 +1960,7 @@
               ))}
             </div>
           </nav>
-
+ 
           {vista === 'hoy' && (
             <main className="max-w-5xl mx-auto px-5 py-5">
               <div className="flex gap-2 overflow-x-auto scroll-hide mb-4">
@@ -476,7 +1973,7 @@
                   </button>
                 ))}
               </div>
-
+ 
               {tareasFiltradas.length === 0 ? (
                 <div className="bg-white rounded-2xl p-8 text-center card-shadow">
                   <div className="text-4xl">✨</div>
@@ -492,7 +1989,7 @@
                     const personal = t.cat === 'Personal';
                     const rotativa = t.persona === 'Rotativo MCS';
                     return (
-                      <li key={key + i} onClick={() => toggleTarea(key)}
+                      <li key={key + i} onClick={() => toggleTarea(key, t)}
                         className={`bg-white rounded-2xl p-4 card-shadow cursor-pointer transition-all hover:scale-[1.01] ${done ? 'opacity-60' : ''} ${compartida ? 'ring-1 ring-violet-200' : ''} ${personal ? 'ring-1 ring-yellow-200 bg-yellow-50/40' : ''} ${rotativa ? 'ring-1 ring-blue-200' : ''}`}>
                         <div className="flex items-start gap-3">
                           <span className="mt-0.5 shrink-0 text-2xl">{done ? '✅' : '⭕'}</span>
@@ -521,7 +2018,7 @@
               )}
             </main>
           )}
-
+ 
           {vista === 'semana' && (
             <main className="max-w-5xl mx-auto px-5 py-5">
               {DIAS.map(d => {
@@ -549,7 +2046,7 @@
               })}
             </main>
           )}
-
+ 
           {vista === 'comidas' && (
             <main className="max-w-5xl mx-auto px-5 py-5">
               <h2 className="font-display text-3xl font-bold gradient-text mb-1">Plan de comidas</h2>
@@ -582,12 +2079,12 @@
               </div>
             </main>
           )}
-
+ 
           {vista === 'ropa' && (
             <main className="max-w-5xl mx-auto px-5 py-5">
               <h2 className="font-display text-3xl font-bold gradient-text mb-1">Rotación de ropa</h2>
               <p className="text-sm text-stone-500 mb-4">Cada quien lava SU ropa más una persona asignada. Ciclo de 3 semanas (A → B → C → A).</p>
-
+ 
               <div className="bg-white rounded-2xl p-4 card-shadow mb-4">
                 <p className="text-xs uppercase tracking-wider font-semibold text-stone-500 mb-2">Semana actual</p>
                 <div className="flex gap-2">
@@ -601,7 +2098,7 @@
                   ))}
                 </div>
               </div>
-
+ 
               <div className="space-y-2">
                 {Object.entries(ROTACION_ROPA[semanaRopa]).map(([persona, asign]) => {
                   const m = FAMILIA.find(f => f.nombre === persona);
@@ -619,12 +2116,12 @@
                   );
                 })}
               </div>
-
+ 
               <div className="mt-5 bg-blue-50 border border-blue-200 rounded-2xl p-4">
                 <p className="text-sm text-blue-900 mb-2"><strong>🛁 Baño Papá/Mamá esta semana:</strong></p>
                 <p className="text-sm text-blue-800">Le toca a <strong>{rotMCS[semanaRopa]}</strong> (mantenimiento mar/jue + limpieza profunda sábado).</p>
               </div>
-
+ 
               <div className="mt-3 bg-purple-50 border border-purple-200 rounded-2xl p-4">
                 <p className="text-sm text-purple-900 mb-2"><strong>📌 Cómo funciona</strong></p>
                 <ul className="text-xs text-purple-900 space-y-1">
@@ -636,7 +2133,7 @@
               </div>
             </main>
           )}
-
+ 
           {vista === 'puntaje' && (
             <main className="max-w-5xl mx-auto px-5 py-5">
               <div className="flex items-end justify-between mb-4">
@@ -646,7 +2143,7 @@
                   <p className="font-display text-3xl font-bold text-stone-900">{cumplimientoFamiliar}%</p>
                 </div>
               </div>
-
+ 
               <div className="bg-slate-900 text-white rounded-2xl p-4 mb-3 card-shadow">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-slate-700 to-slate-900 flex items-center justify-center text-xl shadow-md ring-2 ring-amber-400">👔</div>
@@ -659,7 +2156,7 @@
                   </div>
                 </div>
               </div>
-
+ 
               <div className="bg-rose-50 border border-rose-200 rounded-2xl p-4 mb-4">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-rose-500 to-pink-600 flex items-center justify-center text-xl shadow-md">👩‍🍳</div>
@@ -672,7 +2169,7 @@
                   </div>
                 </div>
               </div>
-
+ 
               <div className="space-y-3">
                 {[...puntajePorPersona].sort((a,b) => b.pct - a.pct).map((p, idx) => (
                   <div key={p.id} className="bg-white rounded-2xl p-4 card-shadow">
@@ -693,7 +2190,7 @@
                   </div>
                 ))}
               </div>
-
+ 
               <div className="mt-5 bg-stone-900 text-stone-100 rounded-2xl p-4">
                 <p className="text-xs uppercase tracking-wider font-bold text-amber-400 mb-2">🏆 Reglas de la liga</p>
                 <ul className="text-sm space-y-1 text-stone-300">
@@ -704,16 +2201,17 @@
               </div>
             </main>
           )}
-
+ 
           <footer className="max-w-5xl mx-auto px-5 py-8 text-center text-xs text-stone-400">
-            Limpieza del Hogar · Tus marcas se guardan en este dispositivo
+            Limpieza del Hogar · {apiUrl ? 'Sincronizado con Google Sheets' : 'Sin sincronización (clic en ⚙️ para activar)'}
           </footer>
         </div>
       );
     }
-
+ 
     const root = ReactDOM.createRoot(document.getElementById('root'));
     root.render(<Dashboard />);
   </script>
 </body>
 </html>
+ 
