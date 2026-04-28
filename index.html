@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#c2410c" />
+  <title>Limpieza del Hogar — Casa Benavente</title>
+
+  <!-- React + Babel desde CDN -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- Tailwind via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Fuentes -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,800&display=swap" rel="stylesheet">
+
+  <style>
+    body { font-family: 'Outfit', system-ui, sans-serif; margin: 0; background: #fafaf9; }
+    .font-display { font-family: 'Fraunces', Georgia, serif; font-feature-settings: "ss01"; }
+    .gradient-text { background: linear-gradient(135deg, #be123c 0%, #c2410c 50%, #ca8a04 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .card-shadow { box-shadow: 0 1px 0 rgba(0,0,0,0.04), 0 4px 16px rgba(15,23,42,0.06); }
+    .scroll-hide::-webkit-scrollbar { display: none; }
+    .scroll-hide { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel" data-type="module">
+    const { useState, useMemo, useEffect } = React;
+
+    // Helper para iconos lucide (svg inline)
+    const Icon = ({ name, className = "w-4 h-4", strokeWidth = 2 }) => {
+      const ref = React.useRef(null);
+      React.useEffect(() => {
+        if (ref.current && window.lucide) {
+          ref.current.innerHTML = '';
+          const i = document.createElement('i');
+          i.setAttribute('data-lucide', name);
+          ref.current.appendChild(i);
+          window.lucide.createIcons({ attrs: { 'stroke-width': strokeWidth } });
+        }
+      }, [name]);
+      return <span ref={ref} className={className + " inline-flex items-center justify-center"} />;
+    };
+
+    const FAMILIA = [
+      { id: 'papa',    nombre: 'Papá',    emoji: '👔',  color: 'from-slate-700 to-slate-900',  rol: 'Supervisor + Logística' },
+      { id: 'mama',    nombre: 'Mamá',    emoji: '👩‍🍳', color: 'from-rose-500 to-pink-600',    rol: 'Chef + Logística niños' },
+      { id: 'marcelo', nombre: 'Marcelo', emoji: '🧹',  color: 'from-emerald-500 to-teal-600', rol: 'Operación pesada' },
+      { id: 'camila',  nombre: 'Camila',  emoji: '🎓',  color: 'from-violet-500 to-purple-600',rol: 'Operación alta' },
+      { id: 'sofia',   nombre: 'Sofía',   emoji: '💻',  color: 'from-fuchsia-500 to-pink-600', rol: 'Operación alta' },
+      { id: 'arantza', nombre: 'Arantza', emoji: '🧒',  color: 'from-amber-500 to-orange-600', rol: 'Tareas ligeras (L-J)' },
+      { id: 'leon',    nombre: 'León',    emoji: '👦',  color: 'from-sky-500 to-cyan-600',     rol: 'Tareas ligeras' },
+    ];
+
+    const ROTACION_ROPA = {
+      'Sem A': { Marcelo: 'Marcelo + Mamá',  Sofía: 'Sofía + Camila', Camila: 'Camila + León',   Mamá: 'Sábanas + hogar + Arantza + Papá' },
+      'Sem B': { Marcelo: 'Marcelo + León',  Sofía: 'Sofía + Mamá',   Camila: 'Camila + Marcelo',Mamá: 'Sábanas + hogar + Arantza + Papá' },
+      'Sem C': { Marcelo: 'Marcelo + Sofía', Sofía: 'Sofía + León',   Camila: 'Camila + Mamá',   Mamá: 'Sábanas + hogar + Arantza + Papá' },
+    };
+
+    const ASIGNACIONES = [
+      // LUNES
+      {dia:'Lunes',persona:'Papá',cat:'Personal',tarea:'Gimnasio (con Camila y Sofía)',hora:'06:00',pts:0},
+      {dia:'Lunes',persona:'Camila',cat:'Personal',tarea:'Gimnasio (con Papá)',hora:'06:00',pts:0},
+      {dia:'Lunes',persona:'Sofía',cat:'Personal',tarea:'Gimnasio (con Papá)',hora:'06:00',pts:0},
+      {dia:'Lunes',persona:'Mamá',cat:'Cocina',tarea:'Preparar desayuno',hora:'06:30',pts:10},
+      {dia:'Lunes',persona:'Arantza',cat:'Limpieza',tarea:'Tender su cama',hora:'07:00',pts:3},
+      {dia:'Lunes',persona:'León',cat:'Limpieza',tarea:'Tender su cama',hora:'07:00',pts:3},
+      {dia:'Lunes',persona:'Mamá',cat:'Traslado',tarea:'Llevar Arantza y León al colegio',hora:'07:30',pts:8},
+      {dia:'Lunes',persona:'Camila',cat:'Limpieza',tarea:'Tender su cama (al volver del gym)',hora:'07:30',pts:3},
+      {dia:'Lunes',persona:'Sofía',cat:'Limpieza',tarea:'Tender su cama (al volver del gym)',hora:'07:30',pts:3},
+      {dia:'Lunes',persona:'Camila',cat:'Cocina',tarea:'Lavar trastes desayuno',hora:'07:35',pts:5},
+      {dia:'Lunes',persona:'Mamá',cat:'Cocina',tarea:'Preparar comida',hora:'13:00',pts:20},
+      {dia:'Lunes',persona:'Papá o Mamá',cat:'Traslado',tarea:'Recoger Arantza y León (2:15pm)',hora:'14:15',pts:8},
+      {dia:'Lunes',persona:'Camila',cat:'Cocina',tarea:'Poner la mesa',hora:'14:30',pts:3},
+      {dia:'Lunes',persona:'Sofía',cat:'Cocina',tarea:'Recoger la mesa',hora:'15:00',pts:3},
+      {dia:'Lunes',persona:'Marcelo',cat:'Cocina',tarea:'Lavar trastes / lavavajillas',hora:'15:15',pts:7},
+      {dia:'Lunes',persona:'Sofía',cat:'Cocina',tarea:'Limpiar barra y estufa',hora:'15:20',pts:5},
+      {dia:'Lunes',persona:'Marcelo',cat:'Limpieza',tarea:'Recoger sala y áreas comunes',hora:'18:00',pts:5},
+      {dia:'Lunes',persona:'Marcelo',cat:'Limpieza',tarea:'Mantener baño niños (Mar/León)',hora:'18:15',pts:5},
+      {dia:'Lunes',persona:'Camila',cat:'Limpieza',tarea:'Mantener baño niñas (Cam/Sof/Ara)',hora:'18:15',pts:5},
+      {dia:'Lunes',persona:'Mamá',cat:'Cocina',tarea:'Snacks pre-entreno (todos)',hora:'19:00',pts:5},
+      {dia:'Lunes',persona:'Arantza',cat:'Otros',tarea:'Llevar ropa sucia al cesto correcto',hora:'19:00',pts:2},
+      {dia:'Lunes',persona:'León',cat:'Otros',tarea:'Llevar ropa sucia al cesto correcto',hora:'19:00',pts:2},
+      {dia:'Lunes',persona:'Mamá',cat:'Traslado',tarea:'Llevar a Camila/Sofía/Arantza/León a flag',hora:'19:30',pts:8},
+      {dia:'Lunes',persona:'Mamá',cat:'Traslado',tarea:'Recoger flag (todos)',hora:'21:30',pts:8},
+      {dia:'Lunes',persona:'Mamá',cat:'Cocina',tarea:'Cena tardía',hora:'21:45',pts:12},
+      {dia:'Lunes',persona:'Marcelo',cat:'Cocina',tarea:'Lavar trastes de la cena',hora:'22:15',pts:5},
+      {dia:'Lunes',persona:'Marcelo',cat:'Limpieza',tarea:'Sacar basura (lun/mié/vie)',hora:'22:20',pts:3},
+      {dia:'Lunes',persona:'Arantza',cat:'Otros',tarea:'Revisar mochila + uniforme',hora:'22:00',pts:5},
+      {dia:'Lunes',persona:'León',cat:'Otros',tarea:'Revisar mochila + uniforme',hora:'22:00',pts:5},
+      {dia:'Lunes',persona:'Papá',cat:'Supervisión',tarea:'Revisión cumplimiento del día',hora:'22:30',pts:5},
+
+      // MARTES
+      {dia:'Martes',persona:'Papá',cat:'Personal',tarea:'Gimnasio (con Camila y Sofía)',hora:'06:00',pts:0},
+      {dia:'Martes',persona:'Camila',cat:'Personal',tarea:'Gimnasio',hora:'06:00',pts:0},
+      {dia:'Martes',persona:'Sofía',cat:'Personal',tarea:'Gimnasio',hora:'06:00',pts:0},
+      {dia:'Martes',persona:'Mamá',cat:'Cocina',tarea:'Preparar desayuno',hora:'06:30',pts:10},
+      {dia:'Martes',persona:'Arantza',cat:'Limpieza',tarea:'Tender su cama',hora:'07:00',pts:3},
+      {dia:'Martes',persona:'León',cat:'Limpieza',tarea:'Tender su cama',hora:'07:00',pts:3},
+      {dia:'Martes',persona:'Mamá',cat:'Traslado',tarea:'Llevar Arantza y León al colegio',hora:'07:30',pts:8},
+      {dia:'Martes',persona:'Camila',cat:'Limpieza',tarea:'Tender su cama',hora:'07:30',pts:3},
+      {dia:'Martes',persona:'Sofía',cat:'Limpieza',tarea:'Tender su cama',hora:'07:30',pts:3},
+      {dia:'Martes',persona:'Sofía',cat:'Cocina',tarea:'Lavar trastes desayuno',hora:'07:35',pts:5},
+      {dia:'Martes',persona:'Mamá',cat:'Cocina',tarea:'Preparar comida',hora:'13:00',pts:20},
+      {dia:'Martes',persona:'Papá o Mamá',cat:'Traslado',tarea:'Recoger Arantza y León (2:15pm)',hora:'14:15',pts:8},
+      {dia:'Martes',persona:'Sofía',cat:'Cocina',tarea:'Poner la mesa',hora:'14:30',pts:3},
+      {dia:'Martes',persona:'Camila',cat:'Cocina',tarea:'Recoger la mesa',hora:'15:00',pts:3},
+      {dia:'Martes',persona:'Marcelo',cat:'Cocina',tarea:'Lavar trastes',hora:'15:15',pts:7},
+      {dia:'Martes',persona:'Camila',cat:'Cocina',tarea:'Limpiar barra y estufa',hora:'15:20',pts:5},
+      {dia:'Martes',persona:'Marcelo',cat:'Limpieza',tarea:'Aspirar áreas comunes',hora:'16:30',pts:10},
+      {dia:'Martes',persona:'Rotativo MCS',cat:'Limpieza',tarea:'Mantener baño Papá/Mamá (M=A, C=B, S=C)',hora:'16:45',pts:5},
+      {dia:'Martes',persona:'Mamá',cat:'Cocina',tarea:'Snack pre-futbol León',hora:'17:00',pts:5},
+      {dia:'Martes',persona:'Mamá',cat:'Traslado',tarea:'Llevar León a futbol 5:30 + esperar',hora:'17:30',pts:6},
+      {dia:'Martes',persona:'Papá',cat:'Traslado',tarea:'Llevar Camila/Sofía/Arantza a flag',hora:'19:30',pts:8},
+      {dia:'Martes',persona:'Mamá',cat:'Personal',tarea:'Mamá entrena flag (ya está allá)',hora:'19:30',pts:0},
+      {dia:'Martes',persona:'Mamá',cat:'Traslado',tarea:'Recoger flag (todos, incluyendo León)',hora:'21:30',pts:8},
+      {dia:'Martes',persona:'Mamá',cat:'Cocina',tarea:'Cena tardía',hora:'21:45',pts:12},
+      {dia:'Martes',persona:'Sofía',cat:'Cocina',tarea:'Lavar trastes de la cena',hora:'22:15',pts:5},
+      {dia:'Martes',persona:'Arantza',cat:'Otros',tarea:'Revisar mochila + uniforme',hora:'22:00',pts:5},
+      {dia:'Martes',persona:'León',cat:'Otros',tarea:'Revisar mochila + uniforme',hora:'22:00',pts:5},
+      {dia:'Martes',persona:'Papá',cat:'Supervisión',tarea:'Revisión cumplimiento del día',hora:'22:30',pts:5},
+
+      // MIÉRCOLES
+      {dia:'Miércoles',persona:'Papá',cat:'Personal',tarea:'Gimnasio (con Camila y Sofía)',hora:'06:00',pts:0},
+      {dia:'Miércoles',persona:'Camila',cat:'Personal',tarea:'Gimnasio',hora:'06:00',pts:0},
+      {dia:'Miércoles',persona:'Sofía',cat:'Personal',tarea:'Gimnasio',hora:'06:00',pts:0},
+      {dia:'Miércoles',persona:'Mamá',cat:'Cocina',tarea:'Preparar desayuno',hora:'06:30',pts:10},
+      {dia:'Miércoles',persona:'Arantza',cat:'Limpieza',tarea:'Tender su cama',hora:'07:00',pts:3},
+      {dia:'Miércoles',persona:'León',cat:'Limpieza',tarea:'Tender su cama',hora:'07:00',pts:3},
+      {dia:'Miércoles',persona:'Mamá',cat:'Traslado',tarea:'Llevar Arantza y León al colegio',hora:'07:30',pts:8},
+      {dia:'Miércoles',persona:'Camila',cat:'Limpieza',tarea:'Tender su cama',hora:'07:30',pts:3},
+      {dia:'Miércoles',persona:'Sofía',cat:'Limpieza',tarea:'Tender su cama',hora:'07:30',pts:3},
+      {dia:'Miércoles',persona:'Marcelo',cat:'Cocina',tarea:'Lavar trastes desayuno',hora:'07:35',pts:5},
+      {dia:'Miércoles',persona:'Mamá',cat:'Cocina',tarea:'Preparar comida',hora:'13:00',pts:20},
+      {dia:'Miércoles',persona:'Papá o Mamá',cat:'Traslado',tarea:'Recoger Arantza y León (2:15pm)',hora:'14:15',pts:8},
+      {dia:'Miércoles',persona:'Arantza',cat:'Cocina',tarea:'Poner la mesa',hora:'14:30',pts:3},
+      {dia:'Miércoles',persona:'León',cat:'Cocina',tarea:'Recoger la mesa (con apoyo)',hora:'15:00',pts:3},
+      {dia:'Miércoles',persona:'Camila',cat:'Cocina',tarea:'Lavar trastes',hora:'15:15',pts:7},
+      {dia:'Miércoles',persona:'Sofía',cat:'Cocina',tarea:'Limpiar barra y estufa',hora:'15:20',pts:5},
+      {dia:'Miércoles',persona:'Marcelo',cat:'Limpieza',tarea:'Trapear cocina y comedor',hora:'16:30',pts:12},
+      {dia:'Miércoles',persona:'Sofía',cat:'Limpieza',tarea:'Mantener baño niñas (2do día)',hora:'16:45',pts:5},
+      {dia:'Miércoles',persona:'Marcelo',cat:'Limpieza',tarea:'Mantener baño niños (2do día)',hora:'17:00',pts:5},
+      {dia:'Miércoles',persona:'Mamá',cat:'Cocina',tarea:'Snacks pre-entreno (todos)',hora:'19:00',pts:5},
+      {dia:'Miércoles',persona:'Mamá',cat:'Traslado',tarea:'Llevar Camila/Sofía/Arantza/León a flag',hora:'19:30',pts:8},
+      {dia:'Miércoles',persona:'Mamá',cat:'Personal',tarea:'Mamá entrena flag',hora:'19:30',pts:0},
+      {dia:'Miércoles',persona:'Mamá',cat:'Traslado',tarea:'Recoger flag (todos)',hora:'21:30',pts:8},
+      {dia:'Miércoles',persona:'Mamá',cat:'Cocina',tarea:'Cena tardía',hora:'21:45',pts:12},
+      {dia:'Miércoles',persona:'Camila',cat:'Cocina',tarea:'Lavar trastes de la cena',hora:'22:15',pts:5},
+      {dia:'Miércoles',persona:'Arantza',cat:'Otros',tarea:'Revisar mochila + uniforme',hora:'22:00',pts:5},
+      {dia:'Miércoles',persona:'León',cat:'Otros',tarea:'Revisar mochila + uniforme',hora:'22:00',pts:5},
+      {dia:'Miércoles',persona:'Marcelo',cat:'Limpieza',tarea:'Sacar basura (lun/mié/vie)',hora:'22:30',pts:3},
+      {dia:'Miércoles',persona:'Papá',cat:'Supervisión',tarea:'Revisión cumplimiento del día',hora:'22:45',pts:5},
+
+      // JUEVES
+      {dia:'Jueves',persona:'Papá',cat:'Personal',tarea:'Gimnasio (con Camila y Sofía)',hora:'06:00',pts:0},
+      {dia:'Jueves',persona:'Camila',cat:'Personal',tarea:'Gimnasio',hora:'06:00',pts:0},
+      {dia:'Jueves',persona:'Sofía',cat:'Personal',tarea:'Gimnasio',hora:'06:00',pts:0},
+      {dia:'Jueves',persona:'Mamá',cat:'Cocina',tarea:'Preparar desayuno',hora:'06:30',pts:10},
+      {dia:'Jueves',persona:'Arantza',cat:'Limpieza',tarea:'Tender su cama',hora:'07:00',pts:3},
+      {dia:'Jueves',persona:'León',cat:'Limpieza',tarea:'Tender su cama',hora:'07:00',pts:3},
+      {dia:'Jueves',persona:'Mamá',cat:'Traslado',tarea:'Llevar Arantza y León al colegio',hora:'07:30',pts:8},
+      {dia:'Jueves',persona:'Camila',cat:'Limpieza',tarea:'Tender su cama',hora:'07:30',pts:3},
+      {dia:'Jueves',persona:'Sofía',cat:'Limpieza',tarea:'Tender su cama',hora:'07:30',pts:3},
+      {dia:'Jueves',persona:'Camila',cat:'Cocina',tarea:'Lavar trastes desayuno',hora:'07:35',pts:5},
+      {dia:'Jueves',persona:'Mamá',cat:'Cocina',tarea:'Preparar comida',hora:'13:00',pts:20},
+      {dia:'Jueves',persona:'Papá o Mamá',cat:'Traslado',tarea:'Recoger Arantza y León (2:15pm)',hora:'14:15',pts:8},
+      {dia:'Jueves',persona:'Marcelo',cat:'Cocina',tarea:'Poner la mesa',hora:'14:30',pts:3},
+      {dia:'Jueves',persona:'León',cat:'Cocina',tarea:'Recoger la mesa (con apoyo)',hora:'15:00',pts:3},
+      {dia:'Jueves',persona:'Sofía',cat:'Cocina',tarea:'Lavar trastes',hora:'15:15',pts:7},
+      {dia:'Jueves',persona:'Camila',cat:'Cocina',tarea:'Limpiar barra y estufa',hora:'15:20',pts:5},
+      {dia:'Jueves',persona:'Marcelo',cat:'Limpieza',tarea:'Aspirar segundo piso',hora:'16:30',pts:10},
+      {dia:'Jueves',persona:'Rotativo MCS',cat:'Limpieza',tarea:'Mantener baño Papá/Mamá 2do día (M=A, C=B, S=C)',hora:'16:45',pts:5},
+      {dia:'Jueves',persona:'Mamá',cat:'Cocina',tarea:'Snack pre-futbol León',hora:'17:00',pts:5},
+      {dia:'Jueves',persona:'Mamá',cat:'Traslado',tarea:'Llevar León a futbol 5:30 + esperar',hora:'17:30',pts:6},
+      {dia:'Jueves',persona:'Papá',cat:'Traslado',tarea:'Llevar Camila/Sofía/Arantza a flag',hora:'19:30',pts:8},
+      {dia:'Jueves',persona:'Mamá',cat:'Personal',tarea:'Mamá entrena flag (ya está allá)',hora:'19:30',pts:0},
+      {dia:'Jueves',persona:'Mamá',cat:'Traslado',tarea:'Recoger flag (todos, incluyendo León)',hora:'21:30',pts:8},
+      {dia:'Jueves',persona:'Mamá',cat:'Cocina',tarea:'Cena tardía',hora:'21:45',pts:12},
+      {dia:'Jueves',persona:'Marcelo',cat:'Cocina',tarea:'Lavar trastes de la cena',hora:'22:15',pts:5},
+      {dia:'Jueves',persona:'Arantza',cat:'Otros',tarea:'Revisar mochila + uniforme',hora:'22:00',pts:5},
+      {dia:'Jueves',persona:'Arantza',cat:'Otros',tarea:'Empacar maleta de fin de semana',hora:'22:05',pts:5},
+      {dia:'Jueves',persona:'León',cat:'Otros',tarea:'Revisar mochila + uniforme',hora:'22:00',pts:5},
+      {dia:'Jueves',persona:'Papá',cat:'Supervisión',tarea:'Revisión cumplimiento del día',hora:'22:45',pts:5},
+
+      // VIERNES (Arantza ya no está)
+      {dia:'Viernes',persona:'Papá',cat:'Personal',tarea:'Gimnasio (con Camila y Sofía)',hora:'06:00',pts:0},
+      {dia:'Viernes',persona:'Camila',cat:'Personal',tarea:'Gimnasio',hora:'06:00',pts:0},
+      {dia:'Viernes',persona:'Sofía',cat:'Personal',tarea:'Gimnasio',hora:'06:00',pts:0},
+      {dia:'Viernes',persona:'Mamá',cat:'Cocina',tarea:'Preparar desayuno',hora:'06:30',pts:10},
+      {dia:'Viernes',persona:'León',cat:'Limpieza',tarea:'Tender su cama',hora:'07:00',pts:3},
+      {dia:'Viernes',persona:'Mamá',cat:'Traslado',tarea:'Llevar León al colegio',hora:'07:30',pts:8},
+      {dia:'Viernes',persona:'Camila',cat:'Limpieza',tarea:'Tender su cama',hora:'07:30',pts:3},
+      {dia:'Viernes',persona:'Sofía',cat:'Limpieza',tarea:'Tender su cama',hora:'07:30',pts:3},
+      {dia:'Viernes',persona:'Sofía',cat:'Cocina',tarea:'Lavar trastes desayuno',hora:'07:35',pts:5},
+      {dia:'Viernes',persona:'Mamá',cat:'Cocina',tarea:'Preparar comida',hora:'13:00',pts:20},
+      {dia:'Viernes',persona:'Papá o Mamá',cat:'Traslado',tarea:'Recoger León (2:15pm)',hora:'14:15',pts:8},
+      {dia:'Viernes',persona:'Sofía',cat:'Cocina',tarea:'Poner la mesa',hora:'14:30',pts:3},
+      {dia:'Viernes',persona:'Camila',cat:'Cocina',tarea:'Recoger la mesa',hora:'15:00',pts:3},
+      {dia:'Viernes',persona:'Marcelo',cat:'Cocina',tarea:'Lavar trastes',hora:'15:15',pts:7},
+      {dia:'Viernes',persona:'Sofía',cat:'Cocina',tarea:'Limpiar barra y estufa',hora:'15:20',pts:5},
+      {dia:'Viernes',persona:'Mamá',cat:'Cocina',tarea:'Cena familiar (sin entreno hoy)',hora:'20:00',pts:15},
+      {dia:'Viernes',persona:'Camila',cat:'Cocina',tarea:'Poner la mesa cena',hora:'19:50',pts:3},
+      {dia:'Viernes',persona:'León',cat:'Cocina',tarea:'Recoger la mesa cena',hora:'20:45',pts:3},
+      {dia:'Viernes',persona:'Marcelo',cat:'Cocina',tarea:'Lavar trastes cena',hora:'21:00',pts:5},
+      {dia:'Viernes',persona:'Marcelo',cat:'Limpieza',tarea:'Sacar basura (lun/mié/vie)',hora:'21:30',pts:3},
+      {dia:'Viernes',persona:'Sofía',cat:'Otros',tarea:'Recoger sala antes del finde',hora:'21:30',pts:4},
+      {dia:'Viernes',persona:'Papá',cat:'Supervisión',tarea:'Revisión cumplimiento del día',hora:'22:00',pts:5},
+
+      // SÁBADO
+      {dia:'Sábado',persona:'Papá',cat:'Traslado',tarea:'Llevar Camila a prepa (7:00am)',hora:'07:00',pts:8},
+      {dia:'Sábado',persona:'Mamá',cat:'Cocina',tarea:'Desayuno especial',hora:'09:00',pts:10},
+      {dia:'Sábado',persona:'Marcelo',cat:'Ropa',tarea:'Lavar carga rotativa de la semana',hora:'09:30',pts:10},
+      {dia:'Sábado',persona:'Sofía',cat:'Ropa',tarea:'Lavar carga rotativa de la semana',hora:'09:30',pts:10},
+      {dia:'Sábado',persona:'Mamá',cat:'Ropa',tarea:'Lavar sábanas, toallas y ropa de hogar',hora:'09:30',pts:8},
+      {dia:'Sábado',persona:'Marcelo',cat:'Limpieza',tarea:'Limpieza profunda cocina',hora:'11:00',pts:15},
+      {dia:'Sábado',persona:'Sofía',cat:'Limpieza',tarea:'Limpiar su recámara a fondo',hora:'10:00',pts:15},
+      {dia:'Sábado',persona:'León',cat:'Limpieza',tarea:'Recoger juguetes y ordenar',hora:'10:00',pts:8},
+      {dia:'Sábado',persona:'Camila',cat:'Limpieza',tarea:'Limpieza profunda baño niñas',hora:'10:30',pts:12},
+      {dia:'Sábado',persona:'Marcelo',cat:'Limpieza',tarea:'Limpieza profunda baño niños',hora:'10:30',pts:12},
+      {dia:'Sábado',persona:'Rotativo MCS',cat:'Limpieza',tarea:'Limpieza profunda baño Papá/Mamá (M=A, C=B, S=C)',hora:'10:30',pts:12},
+      {dia:'Sábado',persona:'Sofía',cat:'Limpieza',tarea:'Limpieza profunda baño oficina',hora:'11:00',pts:10},
+      {dia:'Sábado',persona:'Sofía',cat:'Limpieza',tarea:'Limpiar sofá (aspirar + cojines)',hora:'11:30',pts:10},
+      {dia:'Sábado',persona:'Marcelo',cat:'Limpieza',tarea:'Trapear toda la planta baja',hora:'12:00',pts:15},
+      {dia:'Sábado',persona:'Marcelo',cat:'Limpieza',tarea:'Cambiar sábanas de todas las camas',hora:'12:30',pts:10},
+      {dia:'Sábado',persona:'Papá',cat:'Cocina',tarea:'Comprar comida del mediodía (sábado)',hora:'12:30',pts:15},
+      {dia:'Sábado',persona:'Papá',cat:'Traslado',tarea:'Recoger Camila de prepa (1:00pm)',hora:'13:00',pts:8},
+      {dia:'Sábado',persona:'Camila',cat:'Cocina',tarea:'Poner la mesa (comida sábado)',hora:'13:30',pts:3},
+      {dia:'Sábado',persona:'Camila',cat:'Ropa',tarea:'Lavar carga rotativa (al volver de prepa)',hora:'14:00',pts:10},
+      {dia:'Sábado',persona:'Sofía',cat:'Cocina',tarea:'Recoger la mesa (comida sábado)',hora:'14:30',pts:3},
+      {dia:'Sábado',persona:'Camila',cat:'Limpieza',tarea:'Limpiar su recámara a fondo',hora:'14:30',pts:15},
+      {dia:'Sábado',persona:'Marcelo',cat:'Cocina',tarea:'Lavar trastes (comida sábado)',hora:'14:45',pts:7},
+      {dia:'Sábado',persona:'Marcelo',cat:'Ropa',tarea:'Doblar y guardar carga rotativa',hora:'19:00',pts:10},
+      {dia:'Sábado',persona:'Sofía',cat:'Ropa',tarea:'Doblar y guardar carga rotativa',hora:'19:00',pts:10},
+      {dia:'Sábado',persona:'Camila',cat:'Ropa',tarea:'Doblar y guardar carga rotativa',hora:'19:00',pts:10},
+      {dia:'Sábado',persona:'Mamá',cat:'Ropa',tarea:'Doblar sábanas y ropa de hogar',hora:'19:00',pts:8},
+      {dia:'Sábado',persona:'Papá',cat:'Supervisión',tarea:'Revisión limpieza profunda + rotación ropa',hora:'20:00',pts:5},
+
+      // DOMINGO
+      {dia:'Domingo',persona:'Mamá',cat:'Cocina',tarea:'Plan de comidas próxima semana',hora:'11:00',pts:15},
+      {dia:'Domingo',persona:'Papá',cat:'Cocina',tarea:'Plan de comidas próxima semana (con Mamá)',hora:'11:00',pts:15},
+      {dia:'Domingo',persona:'Mamá',cat:'Cocina',tarea:'Súper / despensa (con Papá)',hora:'12:00',pts:25},
+      {dia:'Domingo',persona:'Papá',cat:'Cocina',tarea:'Súper / despensa (con Mamá)',hora:'12:00',pts:25},
+      {dia:'Domingo',persona:'Mamá',cat:'Cocina',tarea:'Comida familiar',hora:'14:00',pts:25},
+      {dia:'Domingo',persona:'Camila',cat:'Cocina',tarea:'Poner la mesa',hora:'14:30',pts:3},
+      {dia:'Domingo',persona:'Sofía',cat:'Cocina',tarea:'Recoger la mesa',hora:'15:30',pts:3},
+      {dia:'Domingo',persona:'Marcelo',cat:'Cocina',tarea:'Lavar trastes',hora:'15:45',pts:7},
+      {dia:'Domingo',persona:'Camila',cat:'Cocina',tarea:'Limpiar barra y estufa',hora:'15:50',pts:5},
+      {dia:'Domingo',persona:'Camila',cat:'Otros',tarea:'Dejar uniforme listo para lunes',hora:'19:00',pts:3},
+      {dia:'Domingo',persona:'Sofía',cat:'Otros',tarea:'Dejar uniforme listo para lunes',hora:'19:00',pts:3},
+      {dia:'Domingo',persona:'León',cat:'Otros',tarea:'Dejar uniforme + mochila listos',hora:'19:00',pts:5},
+      {dia:'Domingo',persona:'Mamá',cat:'Otros',tarea:'Dejar uniforme + mochila Arantza listos (llega 9pm)',hora:'19:00',pts:5},
+      {dia:'Domingo',persona:'Papá o Mamá',cat:'Traslado',tarea:'Recoger Arantza (9:00pm)',hora:'21:00',pts:8},
+      {dia:'Domingo',persona:'Papá',cat:'Supervisión',tarea:'Junta familiar de revisión semanal',hora:'20:00',pts:15},
+    ];
+
+    const COMIDAS = [
+      { dia:'Lunes',     desayuno:'Fruta + huevo + pan tostado',     comida:'Pollo a la plancha + arroz + ensalada', cena:'9:30 pm: quesadillas + verdura' },
+      { dia:'Martes',    desayuno:'Avena + plátano + leche',          comida:'Espagueti rojo + pollo + ensalada',     cena:'9:30 pm: sopa + sándwich' },
+      { dia:'Miércoles', desayuno:'Hot cakes + fruta',                 comida:'Tinga de res + frijoles + arroz',       cena:'9:30 pm: quesadillas + frijoles' },
+      { dia:'Jueves',    desayuno:'Yogurt + granola + fruta',          comida:'Filete pescado + verdura + papa',       cena:'9:30 pm: molletes + pico de gallo' },
+      { dia:'Viernes',   desayuno:'Chilaquiles + huevo',                comida:'Pizza casera + ensalada',               cena:'8:00 pm familiar: tabla quesos / hamburguesas' },
+      { dia:'Sábado',    desayuno:'Huevos rancheros + frijoles',        comida:'Comprada por Papá (afuera)',            cena:'8:00 pm: libre / pedido' },
+      { dia:'Domingo',   desayuno:'Pan dulce + fruta + leche',          comida:'Comida familiar',                       cena:'8:00 pm: sopa caldosa + sándwich' },
+    ];
+
+    const CAT_COLORS = {
+      Cocina:'bg-amber-50 text-amber-900 border-amber-200',
+      Ropa:'bg-purple-50 text-purple-900 border-purple-200',
+      Limpieza:'bg-emerald-50 text-emerald-900 border-emerald-200',
+      Traslado:'bg-violet-50 text-violet-900 border-violet-200',
+      Supervisión:'bg-slate-100 text-slate-900 border-slate-300',
+      Personal:'bg-yellow-50 text-yellow-900 border-yellow-200',
+      Otros:'bg-stone-50 text-stone-900 border-stone-200',
+    };
+    const CAT_DOT = {
+      Cocina:'bg-amber-500',Ropa:'bg-purple-500',Limpieza:'bg-emerald-500',
+      Traslado:'bg-violet-500',Supervisión:'bg-slate-700',Personal:'bg-yellow-500',Otros:'bg-stone-500',
+    };
+    const DIAS = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
+
+    function getStorageKey() {
+      // Persistencia por semana ISO
+      const d = new Date();
+      d.setHours(0,0,0,0);
+      d.setDate(d.getDate() + 4 - (d.getDay()||7));
+      const year = d.getFullYear();
+      const wk = Math.ceil((((d - new Date(year,0,1)) / 86400000) + 1)/7);
+      return `limpieza_hogar_${year}W${wk}`;
+    }
+
+    function Dashboard() {
+      const [personaActiva, setPersonaActiva] = useState('todos');
+      const [diaActivo, setDiaActivo] = useState(() => {
+        const idx = (new Date().getDay() + 6) % 7;
+        return DIAS[idx];
+      });
+      const [vista, setVista] = useState('hoy');
+      const [completadas, setCompletadas] = useState(() => {
+        try {
+          const saved = localStorage.getItem(getStorageKey());
+          return saved ? JSON.parse(saved) : {};
+        } catch { return {}; }
+      });
+      const [semanaRopa, setSemanaRopa] = useState(() => {
+        try { return localStorage.getItem('semana_ropa') || 'Sem A'; }
+        catch { return 'Sem A'; }
+      });
+
+      useEffect(() => {
+        try { localStorage.setItem(getStorageKey(), JSON.stringify(completadas)); } catch {}
+      }, [completadas]);
+
+      useEffect(() => {
+        try { localStorage.setItem('semana_ropa', semanaRopa); } catch {}
+      }, [semanaRopa]);
+
+      useEffect(() => { if (window.lucide) window.lucide.createIcons(); });
+
+      const toggleTarea = (key) => setCompletadas(p => ({...p, [key]: !p[key]}));
+
+      const tareasFiltradas = useMemo(() => {
+        const rotMCS = { 'Sem A': 'Marcelo', 'Sem B': 'Camila', 'Sem C': 'Sofía' };
+        const personaRotativaActiva = rotMCS[semanaRopa];
+        return ASIGNACIONES.filter(t => {
+          let matchPersona;
+          if (personaActiva === 'todos') {
+            matchPersona = true;
+          } else {
+            const nombre = FAMILIA.find(f => f.id === personaActiva)?.nombre;
+            if (personaActiva === 'papa' || personaActiva === 'mama') {
+              matchPersona = t.persona === nombre || t.persona === 'Papá o Mamá';
+            } else {
+              matchPersona = t.persona === nombre ||
+                (t.persona === 'Rotativo MCS' && nombre === personaRotativaActiva);
+            }
+          }
+          const matchDia = vista === 'hoy' ? t.dia === diaActivo : true;
+          return matchPersona && matchDia;
+        }).sort((a,b) => a.hora.localeCompare(b.hora));
+      }, [personaActiva, diaActivo, vista, semanaRopa]);
+
+      const puntajePorPersona = useMemo(() => {
+        return FAMILIA.filter(f => f.id !== 'papa' && f.id !== 'mama').map(p => {
+          const tareas = ASIGNACIONES.filter(t => t.persona === p.nombre);
+          const completas = tareas.filter(t => completadas[`${t.dia}-${t.persona}-${t.tarea}`]);
+          const ptsTotal = tareas.reduce((s,t) => s + t.pts, 0);
+          const ptsHechos = completas.reduce((s,t) => s + t.pts, 0);
+          return { ...p, total: tareas.length, hechas: completas.length, ptsTotal, ptsHechos,
+            pct: tareas.length ? Math.round((completas.length / tareas.length) * 100) : 0 };
+        });
+      }, [completadas]);
+
+      const cumplimientoFamiliar = useMemo(() => {
+        const operativas = ASIGNACIONES.filter(t => t.persona !== 'Papá' && t.cat !== 'Personal');
+        const hechas = operativas.filter(t => completadas[`${t.dia}-${t.persona}-${t.tarea}`]).length;
+        return operativas.length ? Math.round((hechas / operativas.length) * 100) : 0;
+      }, [completadas]);
+
+      const personaSel = FAMILIA.find(f => f.id === personaActiva);
+      const rotMCS = { 'Sem A': 'Marcelo', 'Sem B': 'Camila', 'Sem C': 'Sofía' };
+
+      return (
+        <div className="min-h-screen bg-stone-50">
+          <header className="bg-gradient-to-br from-rose-600 via-orange-600 to-amber-500 text-white relative overflow-hidden">
+            <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 20% 50%, white 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
+            <div className="relative max-w-5xl mx-auto px-5 pt-8 pb-6">
+              <div className="flex items-center gap-2 text-rose-100 text-sm font-medium tracking-wider uppercase">
+                <Icon name="home" className="w-4 h-4" />
+                Limpieza del Hogar
+              </div>
+              <h1 className="font-display text-4xl sm:text-5xl font-extrabold mt-2 leading-tight">
+                ¿Qué me toca <span className="italic">hoy</span>?
+              </h1>
+              <p className="text-rose-50/90 mt-2 text-sm sm:text-base">Sistema operativo del hogar — roles definidos, rotación de ropa, traslados coordinados.</p>
+            </div>
+          </header>
+
+          <section className="max-w-5xl mx-auto px-5 -mt-4 relative z-10">
+            <div className="bg-white rounded-2xl card-shadow p-3">
+              <div className="flex gap-2 overflow-x-auto scroll-hide pb-1">
+                <button onClick={() => setPersonaActiva('todos')}
+                  className={`shrink-0 px-4 py-2.5 rounded-xl font-semibold text-sm transition-all ${
+                    personaActiva === 'todos' ? 'bg-stone-900 text-white shadow-md' : 'bg-stone-100 text-stone-700 hover:bg-stone-200'
+                  }`}>
+                  ✨ Toda la familia
+                </button>
+                {FAMILIA.map(p => (
+                  <button key={p.id} onClick={() => setPersonaActiva(p.id)}
+                    className={`shrink-0 px-4 py-2.5 rounded-xl font-semibold text-sm transition-all flex items-center gap-1.5 ${
+                      personaActiva === p.id ? `bg-gradient-to-r ${p.color} text-white shadow-md` : 'bg-stone-100 text-stone-700 hover:bg-stone-200'
+                    }`}>
+                    <span className="text-base">{p.emoji}</span>
+                    {p.nombre}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {personaSel && (
+            <section className="max-w-5xl mx-auto px-5 mt-3">
+              <div className={`rounded-2xl p-4 bg-gradient-to-br ${personaSel.color} text-white card-shadow flex items-center gap-3`}>
+                <span className="text-3xl">{personaSel.emoji}</span>
+                <div className="flex-1">
+                  <p className="text-xs uppercase tracking-wider opacity-80">{personaSel.rol}</p>
+                  <p className="font-display text-2xl font-bold leading-tight">{personaSel.nombre}</p>
+                </div>
+              </div>
+              {ROTACION_ROPA[semanaRopa]?.[personaSel.nombre] && (
+                <div className="mt-2 bg-purple-50 border border-purple-200 rounded-xl p-3 flex items-center gap-2">
+                  <span className="text-purple-700 shrink-0">👕</span>
+                  <p className="text-xs text-purple-900">
+                    <strong>Ropa esta semana ({semanaRopa}):</strong> {ROTACION_ROPA[semanaRopa][personaSel.nombre]}
+                  </p>
+                </div>
+              )}
+              {personaSel.id === 'arantza' && (
+                <div className="mt-2 bg-amber-50 border border-amber-200 rounded-xl p-3 flex items-center gap-2">
+                  <span className="text-amber-700 shrink-0">📅</span>
+                  <p className="text-xs text-amber-900">
+                    <strong>Disponibilidad:</strong> En casa solo de Lunes a Jueves. Sale viernes en la mañana, regresa domingo 9pm.
+                  </p>
+                </div>
+              )}
+              {rotMCS[semanaRopa] === personaSel.nombre && (
+                <div className="mt-2 bg-blue-50 border border-blue-200 rounded-xl p-3 flex items-center gap-2">
+                  <span className="text-blue-700 shrink-0">✨</span>
+                  <p className="text-xs text-blue-900">
+                    <strong>Rotación de baño Papá/Mamá ({semanaRopa}):</strong> Esta semana te toca mantener (mar/jue) y limpieza profunda (sáb).
+                  </p>
+                </div>
+              )}
+            </section>
+          )}
+
+          <nav className="max-w-5xl mx-auto px-5 mt-4">
+            <div className="flex gap-1 bg-white p-1 rounded-xl card-shadow">
+              {[
+                { id:'hoy',    label:'Hoy',     emoji:'📅' },
+                { id:'semana', label:'Semana',  emoji:'›' },
+                { id:'comidas',label:'Comidas', emoji:'🍽️' },
+                { id:'ropa',   label:'Ropa',    emoji:'👕' },
+                { id:'puntaje',label:'Marcador',emoji:'🏆' },
+              ].map(t => (
+                <button key={t.id} onClick={() => setVista(t.id)}
+                  className={`flex-1 py-2.5 px-2 rounded-lg text-xs sm:text-sm font-semibold transition-all ${
+                    vista === t.id ? 'bg-stone-900 text-white' : 'text-stone-600 hover:bg-stone-100'
+                  }`}>
+                  <span className="mr-1">{t.emoji}</span>
+                  <span className="hidden sm:inline">{t.label}</span>
+                </button>
+              ))}
+            </div>
+          </nav>
+
+          {vista === 'hoy' && (
+            <main className="max-w-5xl mx-auto px-5 py-5">
+              <div className="flex gap-2 overflow-x-auto scroll-hide mb-4">
+                {DIAS.map(d => (
+                  <button key={d} onClick={() => setDiaActivo(d)}
+                    className={`shrink-0 px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
+                      diaActivo === d ? 'bg-stone-900 text-white' : 'bg-white text-stone-600 hover:bg-stone-100 card-shadow'
+                    }`}>
+                    {d}
+                  </button>
+                ))}
+              </div>
+
+              {tareasFiltradas.length === 0 ? (
+                <div className="bg-white rounded-2xl p-8 text-center card-shadow">
+                  <div className="text-4xl">✨</div>
+                  <p className="font-display text-2xl mt-3">Sin tareas asignadas</p>
+                  <p className="text-stone-500 text-sm mt-1">Disfruta el tiempo libre o ayuda a alguien.</p>
+                </div>
+              ) : (
+                <ul className="space-y-2.5">
+                  {tareasFiltradas.map((t, i) => {
+                    const key = `${t.dia}-${t.persona}-${t.tarea}`;
+                    const done = completadas[key];
+                    const compartida = t.persona === 'Papá o Mamá';
+                    const personal = t.cat === 'Personal';
+                    const rotativa = t.persona === 'Rotativo MCS';
+                    return (
+                      <li key={key + i} onClick={() => toggleTarea(key)}
+                        className={`bg-white rounded-2xl p-4 card-shadow cursor-pointer transition-all hover:scale-[1.01] ${done ? 'opacity-60' : ''} ${compartida ? 'ring-1 ring-violet-200' : ''} ${personal ? 'ring-1 ring-yellow-200 bg-yellow-50/40' : ''} ${rotativa ? 'ring-1 ring-blue-200' : ''}`}>
+                        <div className="flex items-start gap-3">
+                          <span className="mt-0.5 shrink-0 text-2xl">{done ? '✅' : '⭕'}</span>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-2 mb-1.5 flex-wrap">
+                              <span className={`inline-flex items-center gap-1 text-[10px] uppercase tracking-wider font-bold px-2 py-0.5 rounded-full border ${CAT_COLORS[t.cat]}`}>
+                                <span className={`w-1.5 h-1.5 rounded-full ${CAT_DOT[t.cat]}`} />
+                                {t.cat}
+                              </span>
+                              <span className="text-xs text-stone-500 font-mono">{t.hora}</span>
+                              <span className="text-xs text-stone-400">·</span>
+                              <span className={`text-xs font-semibold ${compartida ? 'text-violet-700' : rotativa ? 'text-blue-700' : 'text-stone-500'}`}>
+                                {t.persona}
+                              </span>
+                            </div>
+                            <p className={`text-stone-900 font-medium ${done ? 'line-through' : ''}`}>{t.tarea}</p>
+                          </div>
+                          {t.pts > 0 && (
+                            <span className="shrink-0 text-xs font-bold text-amber-700 bg-amber-50 px-2 py-1 rounded-lg border border-amber-200">+{t.pts}</span>
+                          )}
+                        </div>
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
+            </main>
+          )}
+
+          {vista === 'semana' && (
+            <main className="max-w-5xl mx-auto px-5 py-5">
+              {DIAS.map(d => {
+                const tareasDia = tareasFiltradas.filter(t => t.dia === d);
+                if (tareasDia.length === 0) return null;
+                return (
+                  <div key={d} className="mb-5">
+                    <h3 className="font-display text-2xl font-bold text-stone-900 mb-2 flex items-baseline gap-2">
+                      {d}
+                      <span className="text-sm font-sans font-medium text-stone-400">{tareasDia.length} tareas</span>
+                    </h3>
+                    <div className="space-y-2">
+                      {tareasDia.map((t,i) => (
+                        <div key={d+i} className="bg-white rounded-xl p-3 card-shadow flex items-center gap-3">
+                          <span className={`w-2 h-2 rounded-full ${CAT_DOT[t.cat]} shrink-0`} />
+                          <span className="text-xs text-stone-500 font-mono w-12 shrink-0">{t.hora}</span>
+                          <span className={`text-xs font-semibold w-24 shrink-0 truncate ${t.persona === 'Papá o Mamá' ? 'text-violet-700' : 'text-stone-700'}`}>{t.persona}</span>
+                          <span className="text-sm text-stone-900 flex-1 truncate">{t.tarea}</span>
+                          {t.pts > 0 && <span className="text-xs font-bold text-amber-600 shrink-0">+{t.pts}</span>}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })}
+            </main>
+          )}
+
+          {vista === 'comidas' && (
+            <main className="max-w-5xl mx-auto px-5 py-5">
+              <h2 className="font-display text-3xl font-bold gradient-text mb-1">Plan de comidas</h2>
+              <p className="text-sm text-stone-500 mb-4">Mamá: desayuno + comida 1pm + cena · Cenas L-J son tardías (9:30pm post-entreno)</p>
+              <div className="grid sm:grid-cols-2 gap-3">
+                {COMIDAS.map(c => (
+                  <div key={c.dia} className="bg-white rounded-2xl p-4 card-shadow">
+                    <p className="text-xs uppercase tracking-wider font-bold text-orange-600 mb-2">{c.dia}</p>
+                    <div className="space-y-2">
+                      <div>
+                        <p className="text-[10px] uppercase font-semibold text-stone-400">Desayuno</p>
+                        <p className="text-sm text-stone-800">{c.desayuno}</p>
+                      </div>
+                      <div>
+                        <p className="text-[10px] uppercase font-semibold text-stone-400">Comida 1pm</p>
+                        <p className="text-sm text-stone-800">{c.comida}</p>
+                      </div>
+                      <div>
+                        <p className="text-[10px] uppercase font-semibold text-stone-400">Cena</p>
+                        <p className="text-sm text-stone-800">{c.cena}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-5 bg-amber-50 border border-amber-200 rounded-2xl p-4">
+                <p className="text-sm text-amber-900">
+                  <strong>Tip:</strong> Sábado a la 1pm Papá compra la comida fuera. Domingo 11am Mamá y Papá hacen el plan de menú juntos, y a las 12pm hacen el súper en pareja.
+                </p>
+              </div>
+            </main>
+          )}
+
+          {vista === 'ropa' && (
+            <main className="max-w-5xl mx-auto px-5 py-5">
+              <h2 className="font-display text-3xl font-bold gradient-text mb-1">Rotación de ropa</h2>
+              <p className="text-sm text-stone-500 mb-4">Cada quien lava SU ropa más una persona asignada. Ciclo de 3 semanas (A → B → C → A).</p>
+
+              <div className="bg-white rounded-2xl p-4 card-shadow mb-4">
+                <p className="text-xs uppercase tracking-wider font-semibold text-stone-500 mb-2">Semana actual</p>
+                <div className="flex gap-2">
+                  {['Sem A','Sem B','Sem C'].map(s => (
+                    <button key={s} onClick={() => setSemanaRopa(s)}
+                      className={`flex-1 py-3 rounded-xl text-sm font-bold transition-all ${
+                        semanaRopa === s ? 'bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white shadow-md' : 'bg-stone-100 text-stone-700'
+                      }`}>
+                      {s}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                {Object.entries(ROTACION_ROPA[semanaRopa]).map(([persona, asign]) => {
+                  const m = FAMILIA.find(f => f.nombre === persona);
+                  return (
+                    <div key={persona} className="bg-white rounded-2xl p-4 card-shadow flex items-center gap-3">
+                      <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${m?.color || 'from-stone-400 to-stone-600'} flex items-center justify-center text-xl shadow-md`}>
+                        {m?.emoji || '👤'}
+                      </div>
+                      <div className="flex-1">
+                        <p className="font-display text-lg font-bold text-stone-900">{persona}</p>
+                        <p className="text-xs text-stone-500">Esta semana lava:</p>
+                      </div>
+                      <p className="text-sm font-semibold text-purple-700 text-right">{asign}</p>
+                    </div>
+                  );
+                })}
+              </div>
+
+              <div className="mt-5 bg-blue-50 border border-blue-200 rounded-2xl p-4">
+                <p className="text-sm text-blue-900 mb-2"><strong>🛁 Baño Papá/Mamá esta semana:</strong></p>
+                <p className="text-sm text-blue-800">Le toca a <strong>{rotMCS[semanaRopa]}</strong> (mantenimiento mar/jue + limpieza profunda sábado).</p>
+              </div>
+
+              <div className="mt-3 bg-purple-50 border border-purple-200 rounded-2xl p-4">
+                <p className="text-sm text-purple-900 mb-2"><strong>📌 Cómo funciona</strong></p>
+                <ul className="text-xs text-purple-900 space-y-1">
+                  <li>• Día de lavado: <strong>sábado 9:30am</strong> (Camila al volver de prepa 14:00).</li>
+                  <li>• Día de doblar y guardar: <strong>sábado 19:00</strong>.</li>
+                  <li>• Si tu ropa no está en el cesto el viernes en la noche, no se lava.</li>
+                  <li>• Cada lunes, Papá actualiza la semana (A → B → C → A).</li>
+                </ul>
+              </div>
+            </main>
+          )}
+
+          {vista === 'puntaje' && (
+            <main className="max-w-5xl mx-auto px-5 py-5">
+              <div className="flex items-end justify-between mb-4">
+                <h2 className="font-display text-3xl font-bold gradient-text">Liga familiar</h2>
+                <div className="text-right">
+                  <p className="text-xs uppercase tracking-wider text-stone-500 font-semibold">Familia</p>
+                  <p className="font-display text-3xl font-bold text-stone-900">{cumplimientoFamiliar}%</p>
+                </div>
+              </div>
+
+              <div className="bg-slate-900 text-white rounded-2xl p-4 mb-3 card-shadow">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-slate-700 to-slate-900 flex items-center justify-center text-xl shadow-md ring-2 ring-amber-400">👔</div>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2">
+                      <span className="font-display text-lg font-bold">Papá</span>
+                      <span className="text-[10px] uppercase tracking-wider font-bold px-2 py-0.5 rounded-full bg-amber-400 text-slate-900">Supervisor</span>
+                    </div>
+                    <p className="text-xs text-slate-300">Métrica: cumplimiento global familiar ↑</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-rose-50 border border-rose-200 rounded-2xl p-4 mb-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-rose-500 to-pink-600 flex items-center justify-center text-xl shadow-md">👩‍🍳</div>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2">
+                      <span className="font-display text-lg font-bold text-rose-900">Mamá</span>
+                      <span className="text-[10px] uppercase tracking-wider font-bold px-2 py-0.5 rounded-full bg-rose-200 text-rose-900">Chef</span>
+                    </div>
+                    <p className="text-xs text-rose-800">Métrica: comidas servidas + traslados cubiertos</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                {[...puntajePorPersona].sort((a,b) => b.pct - a.pct).map((p, idx) => (
+                  <div key={p.id} className="bg-white rounded-2xl p-4 card-shadow">
+                    <div className="flex items-center gap-3 mb-2">
+                      <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${p.color} flex items-center justify-center text-xl shadow-md`}>{p.emoji}</div>
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2">
+                          <span className="font-display text-lg font-bold">{p.nombre}</span>
+                          {idx === 0 && <span className="text-amber-500">🏆</span>}
+                        </div>
+                        <p className="text-xs text-stone-500">{p.hechas} de {p.total} tareas · {p.ptsHechos}/{p.ptsTotal} pts</p>
+                      </div>
+                      <span className="font-display text-2xl font-bold text-stone-900">{p.pct}%</span>
+                    </div>
+                    <div className="h-2 bg-stone-100 rounded-full overflow-hidden">
+                      <div className={`h-full bg-gradient-to-r ${p.color} transition-all duration-500`} style={{ width: `${p.pct}%` }} />
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-5 bg-stone-900 text-stone-100 rounded-2xl p-4">
+                <p className="text-xs uppercase tracking-wider font-bold text-amber-400 mb-2">🏆 Reglas de la liga</p>
+                <ul className="text-sm space-y-1 text-stone-300">
+                  <li>• 90%+ semanal individual → privilegio (peli, postre, salida)</li>
+                  <li>• Top del mes → 1 día de pase libre</li>
+                  <li>• 90%+ familiar → salida especial el finde</li>
+                </ul>
+              </div>
+            </main>
+          )}
+
+          <footer className="max-w-5xl mx-auto px-5 py-8 text-center text-xs text-stone-400">
+            Limpieza del Hogar · Tus marcas se guardan en este dispositivo
+          </footer>
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<Dashboard />);
+  </script>
+</body>
+</html>
